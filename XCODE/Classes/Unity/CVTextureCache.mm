@@ -1,6 +1,7 @@
 #include "CVTextureCache.h"
 
 #include "DisplayManager.h"
+#include "UnityMetalSupport.h"
 #include <CoreVideo/CVMetalTextureCache.h>
 
 void* CreateCVTextureCache()

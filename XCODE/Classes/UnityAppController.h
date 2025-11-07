@@ -2,24 +2,11 @@
 
 #import <QuartzCore/CADisplayLink.h>
 
-#import <UnityFramework/RenderPluginDelegate.h>
+#include "RenderPluginDelegate.h"
 
 @class UnityView;
 @class UnityViewControllerBase;
 @class DisplayConnection;
-
-typedef enum
-{
-    kUnityEngineLoadStateNotStarted = 0,
-    // Minimal initialization done, allowing limited API use, such as reporting URL app was launched with
-    kUnityEngineLoadStateMinimal = 1,
-    // Core of Unity engine is loaded, but no graphics or first scene yet
-    kUnityEngineLoadStateCoreInitialized = 2,
-    // Rendering was initialized, nothing related to rendering should be touched before this state
-    kUnityEngineLoadStateRenderingInitialized = 3,
-    // Unity is fully initialized, it's not safe to call Unity APIs before this state
-    kUnityEngineLoadStateAppReady = 4,
-} UnityEngineLoadState;
 
 __attribute__ ((visibility("default")))
 @interface UnityAppController : NSObject<UIApplicationDelegate>
@@ -57,9 +44,6 @@ __attribute__ ((visibility("default")))
 // it will start showing unity view and rendering unity content
 - (void)startUnity:(UIApplication*)application;
 
-- (BOOL)advanceEngineLoadState:(UnityEngineLoadState)newState;
-- (BOOL)downgradeEngineLoadState:(UnityEngineLoadState)newState;
-
 // this is a part of UIApplicationDelegate protocol starting with ios5
 // setter will be generated empty
 @property (retain, nonatomic) UIWindow* window;
@@ -75,7 +59,6 @@ __attribute__ ((visibility("default")))
 @property (readonly, nonatomic) UIInterfaceOrientation      interfaceOrientation;
 #endif
 
-@property (readonly) UnityEngineLoadState                   engineLoadState;
 @property (nonatomic, retain) id                            renderDelegate;
 @property (nonatomic, copy)                                 void (^quitHandler)(void);
 

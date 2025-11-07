@@ -223,3 +223,10 @@
 #define STDC_HEADERS 1
 #define HAVE_SYS_ENDIAN_H 1
 #define HAVE_COMPLEX_H 1
+
+// QNX version of setlocale has limited functionality (compared to Linux) and doesn't accept NULL as an argument:
+// https://www.qnx.com/developers/docs/7.1/#com.qnx.doc.neutrino.lib_ref/topic/s/setlocale.html
+// https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/s/setlocale.html
+#define SETLOCALE_NULL_NOT_SUPPORTED 1
+
+#define DO_NOT_CALCULATE_DST_FOR_GMT_AND_UTC 1

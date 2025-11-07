@@ -365,7 +365,7 @@ enum JoystickButtonNumbers
     BTN_COUNT
 };
 
-struct JoystickButtonState
+typedef struct
 {
     int buttonCode;
     bool state;
@@ -373,7 +373,7 @@ struct JoystickButtonState
 
     bool StateChanged() { return state ^ lastRecordedState; }
     void ClearRecordedState() { lastRecordedState = false; }
-};
+} JoystickButtonState;
 
 JoystickButtonState gAggregatedJoystickState[BTN_COUNT];
 
@@ -503,10 +503,10 @@ static void ReportJoystickMicro(int idx, GCMicroGamepad* gamepad)
     GCControllerDirectionPad* dpad = [gamepad dpad];
     GCControllerDirectionPad* cardinalDpad;
 
-#if PLATFORM_TVOS
     if (@available(tvOS 14.5, *))
-        cardinalDpad = [[gamepad dpads] valueForKey: GCInputDirectionalCardinalDpad];
-#endif
+    {
+        cardinalDpad = [[gamepad dpads] valueForKey: @"Cardinal Direction Pad"];
+    }
 
     UnitySetJoystickPosition(idx + 1, 0, GetAxisValue([dpad xAxis]));
     UnitySetJoystickPosition(idx + 1, 1, -GetAxisValue([dpad yAxis]));
@@ -517,21 +517,23 @@ static void ReportJoystickMicro(int idx, GCMicroGamepad* gamepad)
     ReportJoystickButton(idx, BTN_DPAD_LEFT, SelectPreferedButton([dpad left], [cardinalDpad left]));
 
     bool isDirectionalButtonPressed = false;
-#if PLATFORM_TVOS
+    #if PLATFORM_TVOS
     if (cardinalDpad)
     {
-        if (@available(tvOS 15, *))
+        if (@available(tvOS 14.5, *))
+        {
+            isDirectionalButtonPressed = [cardinalDpad up].isPressed ||
+                [cardinalDpad right].isPressed ||
+                [cardinalDpad down].isPressed ||
+                [cardinalDpad left].isPressed;
+        }
+        else if (@available(tvOS 15, *))
         {
             ReportJoystickButton(idx, BTN_A, [[gamepad buttons] valueForKey: GCInputDirectionalCenterButton]);
             isDirectionalButtonPressed = true;
         }
-        else if (@available(tvOS 14.5, *))
-        {
-            isDirectionalButtonPressed =
-                cardinalDpad.up.pressed || cardinalDpad.right.pressed || cardinalDpad.down.pressed || cardinalDpad.left.pressed;
-        }
     }
-#endif
+    #endif
 
     if (!isDirectionalButtonPressed)
         ReportJoystickButton(idx, BTN_A, [gamepad buttonA]);
@@ -556,10 +558,17 @@ static void ReportJoystickExtended(int idx, GCExtendedGamepad* gamepad)
     ReportJoystickButton(idx, BTN_L2, [gamepad leftTrigger]);
     ReportJoystickButton(idx, BTN_R2, [gamepad rightTrigger]);
 
-    ReportJoystickButton(idx, BTN_L3, [gamepad valueForKey: @"leftThumbstickButton"]);
-    ReportJoystickButton(idx, BTN_R3, [gamepad valueForKey: @"rightThumbstickButton"]);
-    ReportJoystickButton(idx, BTN_MENU, [gamepad valueForKey: @"buttonMenu"]);
-    ReportJoystickButton(idx, BTN_PAUSE, [gamepad valueForKey: @"buttonOptions"]);
+    if (@available(iOS 12.1, *))
+    {
+        ReportJoystickButton(idx, BTN_L3, [gamepad valueForKey: @"leftThumbstickButton"]);
+        ReportJoystickButton(idx, BTN_R3, [gamepad valueForKey: @"rightThumbstickButton"]);
+    }
+
+    if (@available(iOS 13.0, *))
+    {
+        ReportJoystickButton(idx, BTN_MENU, [gamepad valueForKey: @"buttonMenu"]);
+        ReportJoystickButton(idx, BTN_PAUSE, [gamepad valueForKey: @"buttonOptions"]);
+    }
 
     // To avoid overwriting axis input with button input when axis index
     // overlaps with button enum value, handle directional input after buttons.

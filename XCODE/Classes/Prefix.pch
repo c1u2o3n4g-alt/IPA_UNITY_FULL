@@ -20,4 +20,8 @@
     #endif
 #endif
 
+#ifndef TARGET_IPHONE_SIMULATOR
+    #define TARGET_IPHONE_SIMULATOR 0
+#endif
+
 #define printf_console printf

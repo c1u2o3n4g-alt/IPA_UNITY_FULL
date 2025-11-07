@@ -18,7 +18,6 @@
 - (void)clearColorAndDepthCameraCaptureSession;
 - (void)captureOutput:(AVCaptureOutput*)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection*)connection;
 #if !PLATFORM_VISIONOS
-- (void)depthDataOutput:(AVCaptureDepthDataOutput*)captureDepthOutput didOutputDepthData:(AVDepthData*)depthData  timestamp:(CMTime)timestamp connection:(AVCaptureConnection*)connection;
 - (void)dataOutputSynchronizer:(AVCaptureDataOutputSynchronizer *)synchronizer didOutputSynchronizedDataCollection:(AVCaptureSynchronizedDataCollection *)synchronizedDataCollection;
 + (BOOL)focusPointSupported:(AVCaptureDevice*)captureDevice withFocusMode:(AVCaptureFocusMode)focusMode;
 #endif
@@ -51,7 +50,6 @@
 
 enum WebCamKind
 {
-    kWebCamUnknown = 0,
     kWebCamWideAngle = 1,
     kWebCamTelephoto = 2,
     kWebCamColorAndDepth = 3,

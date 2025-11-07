@@ -195,14 +195,11 @@ static NSMutableArray<UnityURLRequest*>* currentRequests;
         }
 
 #if !defined(DISABLE_WEBREQUEST_CERTIFICATE_CALLBACK)
-        SecTrustResultType systemResult = kSecTrustResultProceed;
-        CFErrorRef error;
+        SecTrustResultType systemResult;
         SecTrustRef serverTrust = [[challenge protectionSpace] serverTrust];
-        if (serverTrust == nil)
-            systemResult = kSecTrustResultOtherError;
-        else if (!SecTrustEvaluateWithError(serverTrust, &error))
+        if (serverTrust == nil || errSecSuccess != SecTrustEvaluate(serverTrust, &systemResult))
         {
-            SecTrustGetTrustResult(serverTrust, &systemResult);
+            systemResult = kSecTrustResultOtherError;
         }
 
         switch (systemResult)

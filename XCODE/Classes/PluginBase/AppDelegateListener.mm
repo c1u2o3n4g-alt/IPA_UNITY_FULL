@@ -27,14 +27,9 @@ void UnityRegisterAppDelegateListener(id<AppDelegateListener> obj)
 
     REGISTER_SELECTOR(@selector(applicationDidReceiveMemoryWarning:), UIApplicationDidReceiveMemoryWarningNotification);
     REGISTER_SELECTOR(@selector(applicationSignificantTimeChange:), UIApplicationSignificantTimeChangeNotification);
-
 #if !PLATFORM_TVOS && !PLATFORM_VISIONOS
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    // these notifications are deprecated, but we keep registration for backward compatibility
     REGISTER_SELECTOR(@selector(applicationWillChangeStatusBarFrame:), UIApplicationWillChangeStatusBarFrameNotification);
     REGISTER_SELECTOR(@selector(applicationWillChangeStatusBarOrientation:), UIApplicationWillChangeStatusBarOrientationNotification);
-#pragma pop
 #endif
 
     REGISTER_SELECTOR(@selector(applicationWillFinishLaunchingWithOptions:), kUnityWillFinishLaunchingWithOptions);
@@ -51,13 +46,8 @@ void UnityUnregisterAppDelegateListener(id<AppDelegateListener> obj)
 
     [[NSNotificationCenter defaultCenter] removeObserver: obj name: UIApplicationDidReceiveMemoryWarningNotification object: nil];
     [[NSNotificationCenter defaultCenter] removeObserver: obj name: UIApplicationSignificantTimeChangeNotification object: nil];
-
 #if !PLATFORM_TVOS && !PLATFORM_VISIONOS
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    // these notifications are deprecated, but we keep registration for backward compatibility
     [[NSNotificationCenter defaultCenter] removeObserver: obj name: UIApplicationWillChangeStatusBarFrameNotification object: nil];
     [[NSNotificationCenter defaultCenter] removeObserver: obj name: UIApplicationWillChangeStatusBarOrientationNotification object: nil];
-#pragma pop
 #endif
 }

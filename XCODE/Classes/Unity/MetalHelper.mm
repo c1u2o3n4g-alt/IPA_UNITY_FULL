@@ -1,8 +1,9 @@
 #include "UnityTrampolineCompatibility.h"
 #include "UnityRendering.h"
 
-#import <Metal/Metal.h>
-#import <QuartzCore/QuartzCore.h>
+#include "UnityMetalSupport.h"
+#include <QuartzCore/QuartzCore.h>
+#include <libkern/OSAtomic.h>
 
 #if UNITY_TRAMPOLINE_IN_USE
 #include "UnityAppController.h"
@@ -10,7 +11,6 @@
 #endif
 
 #include "ObjCRuntime.h"
-#include <libkern/OSAtomic.h>
 #include <utility>
 
 extern "C" void InitRenderingMTL()
@@ -21,11 +21,11 @@ static MTLPixelFormat GetColorFormatForSurface(const UnityDisplaySurfaceMTL* sur
 {
     MTLPixelFormat colorFormat = MTLPixelFormatInvalid;
 
-#if PLATFORM_IOS || PLATFORM_VISIONOS || PLATFORM_OSX
+#if PLATFORM_OSX
     if (surface->hdr)
     {
         // 0 = 10 bit, 1 = 16bit
-        if (@available(iOS 16.0, *))
+        if (@available(macOS 10.15, *))
             colorFormat = UnityHDRSurfaceDepth() == 0 ? MTLPixelFormatRGB10A2Unorm : MTLPixelFormatRGBA16Float;
     }
 #endif
@@ -87,16 +87,17 @@ extern "C" void CreateSystemRenderingSurfaceMTL(UnityDisplaySurfaceMTL* surface)
 #endif
 
     CGColorSpaceRef colorSpaceRef = nil;
+
+#if PLATFORM_OSX
     if (surface->hdr)
     {
-        if (@available(iOS 16.0, *))
+        if (@available(macOS 11.0, *)) // 0 = 10bit
             colorSpaceRef = UnityHDRSurfaceDepth() == 0 ? CGColorSpaceCreateWithName(CFSTR("kCGColorSpaceITUR_2100_PQ")) : CGColorSpaceCreateWithName(CFSTR("kCGColorSpaceExtendedLinearITUR_2020"));
-
-    #if PLATFORM_OSX
-        if(colorSpaceRef == nil)
+        else
             colorSpaceRef = UnityHDRSurfaceDepth() == 0 ? CGColorSpaceCreateWithName(CFSTR("kCGColorSpaceITUR_2020_PQ_EOTF")) : CGColorSpaceCreateWithName(CFSTR("kCGColorSpaceExtendedLinearITUR_2020"));
-    #endif
     }
+#endif
+
     if(colorSpaceRef == nil)
     {
         if (surface->wideColor)
@@ -117,15 +118,9 @@ extern "C" void CreateSystemRenderingSurfaceMTL(UnityDisplaySurfaceMTL* surface)
     surface->colorFormat = (unsigned)colorFormat;
 
     MTLTextureDescriptor* txDesc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat: colorFormat width: surface->systemW height: surface->systemH mipmapped: NO];
-
-    MTLResourceOptions storageModeOptions = MTLResourceStorageModeShared;
 #if PLATFORM_OSX
-    storageModeOptions = MTLResourceStorageModeManaged;
-    if ([surface->device supportsFamily: MTLGPUFamilyApple6])
-        storageModeOptions = MTLResourceStorageModeShared;
+    txDesc.resourceOptions = MTLResourceCPUCacheModeDefaultCache | MTLResourceStorageModeManaged;
 #endif
-
-    txDesc.resourceOptions = MTLResourceCPUCacheModeDefaultCache | storageModeOptions;
     txDesc.usage = MTLTextureUsageRenderTarget | MTLTextureUsageShaderRead;
 
     @synchronized(surface->layer)
@@ -382,9 +377,6 @@ extern "C" MTLTextureRef AcquireDrawableMTL(UnityDisplaySurfaceMTL* surface)
     // on A7 SoC nextDrawable may be nil before locking the screen
     if (!surface->drawable)
         return nil;
-
-    if (surface->drawableTex)
-        return surface->drawableTex;
 
     id<MTLTexture> drawableTex = [surface->drawable texture];
 

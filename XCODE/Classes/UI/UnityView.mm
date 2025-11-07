@@ -3,8 +3,11 @@
 #include "UnityAppController+Rendering.h"
 #include "OrientationSupport.h"
 #include "Unity/DisplayManager.h"
+#include "Unity/UnityMetalSupport.h"
 #include "Unity/ObjCRuntime.h"
 
+extern bool _renderingInited;
+extern bool _unityAppReady;
 extern bool _skipPresent;
 
 @implementation UnityView
@@ -35,9 +38,11 @@ extern bool _skipPresent;
     self.exclusiveTouch         = YES;
 #endif
     self.contentScaleFactor     = scale;
-    self.skipRendering = NO;
+    self.isAccessibilityElement = TRUE;
+    self.accessibilityTraits    = UIAccessibilityTraitAllowsDirectInteraction;
+    self.skipRendering          = NO;
 
-#if PLATFORM_TVOS
+#if UNITY_TVOS
     _curOrientation = UNITY_TVOS_ORIENTATION;
 #elif UNITY_VISIONOS
     _curOrientation = UNITY_VISIONOS_ORIENTATION;
@@ -137,8 +142,7 @@ extern bool _skipPresent;
 
 - (void)recreateRenderingSurface
 {
-    auto controller = GetAppController();
-    if (controller.engineLoadState >= kUnityEngineLoadStateRenderingInitialized)
+    if (_renderingInited)
     {
         unsigned requestedW, requestedH;
         UnityGetRenderingResolution(&requestedW, &requestedH);
@@ -164,7 +168,7 @@ extern bool _skipPresent;
         UnityReportBackbufferChange(GetMainDisplaySurface()->unityColorBuffer, GetMainDisplaySurface()->unityDepthBuffer);
         APP_CONTROLLER_RENDER_PLUGIN_METHOD(onAfterMainDisplaySurfaceRecreate);
 
-        if (controller.engineLoadState >= kUnityEngineLoadStateAppReady)
+        if (_unityAppReady)
         {
             // seems like ios sometimes got confused about abrupt swap chain destroy
             // draw 2 times to fill "both" buffers (we assume double buffering)
@@ -179,7 +183,7 @@ extern bool _skipPresent;
 
             // please note that we still need to pretend we did come from displaylink to make sure vsync magic works
             // NOTE: unity does handle "draw frame with exact same timestamp" just fine
-            UnityDisplayLinkCallback(controller.unityDisplayLink.timestamp);
+            UnityDisplayLinkCallback(GetAppController().unityDisplayLink.timestamp);
             UnityRepaint();
 
             // if we are inside actual repaint: we are done (second draw and present will be done automatically)
@@ -263,7 +267,7 @@ CGRect ComputeSafeArea(UIView* view)
 
     UIEdgeInsets insets = [view safeAreaInsets];
     float insetLeft = insets.left, insetBottom = insets.bottom, insetTop = insets.top;
-    float insetHeight = insetBottom + insetTop;
+    float insetHeight = insetBottom + insetTop; 
     float insetWidth = insetLeft + insets.right;
 
 #if PLATFORM_IOS && !PLATFORM_VISIONOS
@@ -277,9 +281,16 @@ CGRect ComputeSafeArea(UIView* view)
     {
         // everything works as expected
     }
-    else if (view.window.windowScene.statusBarManager.statusBarHidden && fabsf(insetTop - 20) < 1e-6f)
+    else
     {
-        insetHeight -= insetTop;
+        bool isStatusBarHidden = false;
+        if (@available(iOS 13, *))
+            isStatusBarHidden = view.window.windowScene.statusBarManager.statusBarHidden;
+        else
+            isStatusBarHidden = [UIApplication sharedApplication].statusBarHidden;
+
+        if (isStatusBarHidden && fabsf(insetTop - 20) < 1e-6f)
+           insetHeight -= insetTop;
     }
 #endif
 

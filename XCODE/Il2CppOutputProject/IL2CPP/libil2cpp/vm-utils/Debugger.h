@@ -89,9 +89,6 @@ namespace utils
     class Debugger
     {
     public:
-        static void AllocateStaticData();
-        static void FreeStaticData();
-
         static void RegisterMetadata(const Il2CppDebuggerMetadataRegistration *data);
         static void SetAgentOptions(const char* options);
         static void RegisterTransport(const Il2CppDebuggerTransport* transport);
@@ -134,7 +131,6 @@ namespace utils
         static void AllocateThreadLocalData();
         static void FreeThreadLocalData();
         static Il2CppSequencePoint* GetSequencePoint(const Il2CppImage* image, size_t id);
-        static Il2CppSequencePoint* GetSequenceFirstSequencePoint(const MethodInfo* method);
         static Il2CppSequencePoint* GetSequencePoints(const MethodInfo* method, void**iter);
         static Il2CppSequencePoint* GetSequencePoint(const Il2CppImage* image, Il2CppCatchPoint* cp);
         static Il2CppCatchPoint* GetCatchPoints(const MethodInfo* method, void**iter);
