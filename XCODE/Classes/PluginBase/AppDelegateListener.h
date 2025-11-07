@@ -24,8 +24,6 @@
 // these are just hooks to existing notifications
 - (void)applicationDidReceiveMemoryWarning:(NSNotification*)notification;
 - (void)applicationSignificantTimeChange:(NSNotification*)notification;
-- (void)applicationWillChangeStatusBarFrame:(NSNotification*)notification;
-- (void)applicationWillChangeStatusBarOrientation:(NSNotification*)notification;
 @end
 
 void UnityRegisterAppDelegateListener(id<AppDelegateListener> obj);

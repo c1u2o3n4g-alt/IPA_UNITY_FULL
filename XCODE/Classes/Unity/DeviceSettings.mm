@@ -8,61 +8,16 @@
 // ad/vendor ids
 #if UNITY_USES_IAD
 #include <AdSupport/ASIdentifierManager.h>
-#include <AppTrackingTransparency/ATTrackingManager.h>
 static id QueryASIdentifierManager()
 {
-    static bool _queryAttempted = false;
-    static id _manager = nil;
-
-    if (_queryAttempted)
-        return _manager;
-
-    _queryAttempted = true;
     NSBundle* bundle = [NSBundle bundleWithPath: @"/System/Library/Frameworks/AdSupport.framework"];
     if (bundle)
     {
         [bundle load];
-        _manager = [NSClassFromString(@"ASIdentifierManager") performSelector: @selector(sharedManager)];
-        return _manager;
+        return [NSClassFromString(@"ASIdentifierManager") performSelector: @selector(sharedManager)];
     }
 
     return nil;
-}
-
-API_AVAILABLE(ios(14))
-static bool QueryAttTrackingAuthorization()
-{
-    static bool _status = false;
-
-    // if authorization is revoked, app is restarted, so we can cache
-    if (!_status)
-    {
-        static Class _ATTrackingManager = nil;
-        static bool _classLoadAttempted = false;
-
-        if (!_classLoadAttempted)
-        {
-            _classLoadAttempted = true;
-            NSBundle* bundle = [NSBundle bundleWithPath: @"/System/Library/Frameworks/AppTrackingTransparency.framework"];
-            if (bundle)
-            {
-                [bundle load];
-                _ATTrackingManager = NSClassFromString(@"ATTrackingManager");
-            }
-        }
-
-        if (_ATTrackingManager)
-        {
-            id status = [_ATTrackingManager valueForKey: @"trackingAuthorizationStatus"];
-            if (status && [status isKindOfClass: NSNumber.class])
-            {
-                NSNumber* tackingStatus = status;
-                _status = ATTrackingManagerAuthorizationStatusAuthorized == tackingStatus.unsignedIntValue;
-            }
-        }
-    }
-
-    return _status;
 }
 
 #endif
@@ -94,7 +49,7 @@ extern "C" const char* UnityAdIdentifier()
 
 extern "C" int UnityGetLowPowerModeEnabled()
 {
-    return [[NSProcessInfo processInfo] isLowPowerModeEnabled] ? 1 : 0;
+    return [NSProcessInfo processInfo].lowPowerModeEnabled ? 1 : 0;
 }
 
 extern "C" int UnityGetWantsSoftwareDimming()
@@ -118,7 +73,7 @@ extern "C" void UnitySetWantsSoftwareDimming(int enabled)
 extern "C" int UnityGetIosAppOnMac()
 {
     if (@available(iOS 14, tvOS 14, *))
-        return [[NSProcessInfo processInfo] isiOSAppOnMac] ? 1 : 0;
+        return [NSProcessInfo processInfo].iOSAppOnMac ? 1 : 0;
     return 0;
 }
 
@@ -127,17 +82,10 @@ extern "C" int UnityAdTrackingEnabled()
     bool _AdTrackingEnabled = false;
 
 #if UNITY_USES_IAD
-    if (@available(iOS 14.0, tvOS 14.0, *))
-    {
-        _AdTrackingEnabled = QueryAttTrackingAuthorization();
-    }
-    else
-    {
-        // ad tracking can be changed during app lifetime
-        id manager = QueryASIdentifierManager();
-        if (manager)
-            _AdTrackingEnabled = [manager performSelector: @selector(isAdvertisingTrackingEnabled)];
-    }
+    // ad tracking can be changed during app lifetime
+    id manager = QueryASIdentifierManager();
+    if (manager)
+        _AdTrackingEnabled = [manager performSelector: @selector(isAdvertisingTrackingEnabled)];
 #endif
 
     return _AdTrackingEnabled ? 1 : 0;
@@ -474,7 +422,11 @@ extern "C" int UnityDeviceIsStylusTouchSupported()
 
 extern "C" int UnityDeviceCanShowWideColor()
 {
+#if PLATFORM_VISIONOS
+    return 1;
+#else
     return UnityGetUnityView().traitCollection.displayGamut == UIDisplayGamutP3;
+#endif
 }
 
 extern "C" float UnityDeviceDPI()

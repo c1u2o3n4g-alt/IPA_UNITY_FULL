@@ -48,18 +48,28 @@ namespace baselib
             //
             // When semaphore is acquired this function is guaranteed to emit an acquire barrier.
             //
-            // \returns true if event is set, false other wise.
+            // \param maxSpinCount  Max number of times to spin in user space before falling back to the kernel. The actual number
+            //                      may differ depending on the underlying implementation but will never exceed the maxSpinCount
+            //                      value.
+            // \returns             true if event is set, false other wise.
             COMPILER_WARN_UNUSED_RESULT
-            inline bool TryAcquire()
+            inline bool TryAcquire(const uint32_t maxSpinCount = 0)
             {
-                return Baselib_EventSemaphore_TryAcquire(&m_EventSemaphoreData);
+                return Baselib_EventSemaphore_TrySpinAcquire(&m_EventSemaphoreData, maxSpinCount);
             }
 
             // Acquire semaphore.
             //
             // This function is guaranteed to emit an acquire barrier.
-            inline void Acquire()
+            //
+            // \param maxSpinCount  Max number of times to spin in user space before falling back to the kernel. The actual number
+            //                      may differ depending on the underlying implementation but will never exceed the maxSpinCount
+            //                      value.
+            inline void Acquire(const uint32_t maxSpinCount = 0)
             {
+                if (maxSpinCount && Baselib_EventSemaphore_TrySpinAcquire(&m_EventSemaphoreData, maxSpinCount))
+                    return;
+
                 return Baselib_EventSemaphore_Acquire(&m_EventSemaphoreData);
             }
 
@@ -75,10 +85,16 @@ namespace baselib
             // Timeout passed to this function may be subject to system clock resolution.
             // If the system clock has a resolution of e.g. 16ms that means this function may exit with a timeout error 16ms earlier than originally scheduled.
             //
-            // \returns     true if semaphore was acquired.
+            // \param maxSpinCount  Max number of times to spin in user space before falling back to the kernel. The actual number
+            //                      may differ depending on the underlying implementation but will never exceed the maxSpinCount
+            //                      value.
+            // \returns             true if semaphore was acquired.
             COMPILER_WARN_UNUSED_RESULT
-            inline bool TryTimedAcquire(const timeout_ms timeoutInMilliseconds)
+            inline bool TryTimedAcquire(const timeout_ms timeoutInMilliseconds, const uint32_t maxSpinCount = 0)
             {
+                if (maxSpinCount && Baselib_EventSemaphore_TrySpinAcquire(&m_EventSemaphoreData, maxSpinCount))
+                    return true;
+
                 return Baselib_EventSemaphore_TryTimedAcquire(&m_EventSemaphoreData, timeoutInMilliseconds.count());
             }
 
@@ -104,13 +120,19 @@ namespace baselib
                 return Baselib_EventSemaphore_Reset(&m_EventSemaphoreData);
             }
 
+            // Deprecated: Please use ResetAndReleaseWaitingThreads()
+            inline void ResetAndRelease()
+            {
+                return Baselib_EventSemaphore_ResetAndReleaseWaitingThreads(&m_EventSemaphoreData);
+            }
+
             // Reset event and release all waiting threads
             //
             // Resetting the event will cause all future acquiring threads to enter a wait state.
             // If there were any threads waiting (i.e. the EventSemaphore was already in a release state) they will be released.
             //
             // Guaranteed to emit a release barrier.
-            inline void ResetAndRelease()
+            inline void ResetAndReleaseWaitingThreads()
             {
                 return Baselib_EventSemaphore_ResetAndReleaseWaitingThreads(&m_EventSemaphoreData);
             }

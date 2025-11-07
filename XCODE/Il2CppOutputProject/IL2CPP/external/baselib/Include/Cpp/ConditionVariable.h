@@ -4,7 +4,7 @@
 #include "Lock.h"
 #include <cstdint>
 
-#if PLATFORM_FUTEX_NATIVE_SUPPORT
+#if PLATFORM_HAS_NATIVE_FUTEX
 #include "Internal/ConditionVariableData_FutexBased.inl.h"
 #else
 #include "Internal/ConditionVariableData_SemaphoreBased.inl.h"
@@ -91,7 +91,7 @@ namespace baselib
     }
 }
 
-#if PLATFORM_FUTEX_NATIVE_SUPPORT
+#if PLATFORM_HAS_NATIVE_FUTEX
 #include "Internal/ConditionVariable_FutexBased.inl.h"
 #else
 #include "Internal/ConditionVariable_SemaphoreBased.inl.h"

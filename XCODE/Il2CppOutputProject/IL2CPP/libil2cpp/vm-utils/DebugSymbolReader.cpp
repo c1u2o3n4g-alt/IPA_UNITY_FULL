@@ -23,7 +23,6 @@ namespace il2cpp
 {
 namespace utils
 {
-#if !IL2CPP_TINY
     struct usymliteHeader
     {
         uint32_t magic;
@@ -64,9 +63,20 @@ namespace utils
     const uint32_t magicUsymlite = 0x2D6D7973; // "sym-"
     const uint32_t noLine = 0xFFFFFFFF;
 
+    static std::string GetArchFolder()
+    {
+#if IL2CPP_TARGET_ARM64
+        return PathUtils::Combine(utils::Runtime::GetDataDir(), std::string("arm64"));
+#elif IL2CPP_TARGET_X64
+        return PathUtils::Combine(utils::Runtime::GetDataDir(), std::string("x64"));
+#else
+        return std::string("<NotImplemented>");
+#endif
+    }
+
     // Do a binary search to find the line with the given address
     // This is looking for the line with the closest address without going over (price is right style)
-    usymliteLine FindLine(uint64_t address)
+    static usymliteLine FindLine(uint64_t address)
     {
         uint32_t head = 0;
         uint32_t tail = s_usym.header.lineCount - 1;
@@ -97,7 +107,7 @@ namespace utils
         return s_usym.lines[head];
     }
 
-    const char* GetString(uint32_t index)
+    static const char* GetString(uint32_t index)
     {
         IL2CPP_ASSERT(index < s_usym.maxStringIndex);
         return s_usym.strings + index;
@@ -146,6 +156,17 @@ namespace utils
         os::FileHandle* symbolsFileHandle = NULL;
         if (!symbolsPath.empty())
             symbolsFileHandle = os::File::Open(symbolsPath.c_str(), kFileModeOpen, kFileAccessRead, kFileShareRead, kFileOptionsNone, &error);
+
+        // (MacOS only) - Handle cases where the il2cpp.usym file's been dropped under an architecture specific (x64 or arm64) directory
+        if (symbolsPath.empty() || error != 0)
+        {
+            std::string archFolder = GetArchFolder();
+            if (!archFolder.empty())
+                symbolsPath = PathUtils::Combine(archFolder, symbolFileName);
+
+            if (!symbolsPath.empty())
+                symbolsFileHandle = os::File::Open(symbolsPath.c_str(), kFileModeOpen, kFileAccessRead, kFileShareRead, kFileOptionsNone, &error);
+        }
 
         // If we don't have a symbol path yet or there was some error opening the file next to the executable, try to
         // look in the data directory. For some platforms, the packaging won't allow the file to live next to the
@@ -215,7 +236,7 @@ namespace utils
         return true;
     }
 
-    void InsertStackFrame(usymliteLine line, std::vector<Il2CppStackFrameInfo>* stackFrames)
+    static void InsertStackFrame(usymliteLine line, std::vector<Il2CppStackFrameInfo>* stackFrames)
     {
         if (line.parent != noLine)
         {
@@ -232,16 +253,17 @@ namespace utils
         stackFrames->push_back(frameInfo);
     }
 
-    bool DebugSymbolReader::AddStackFrames(void* nativeInstructionPointer, std::vector<Il2CppStackFrameInfo>* stackFrames)
+    // Gets the line information for the given address
+    static bool GetUsymLine(void* address, usymliteLine& line)
     {
-        if (s_usym.debugSymbolData == NULL || nativeInstructionPointer == NULL)
+        if (s_usym.debugSymbolData == NULL || address == NULL)
         {
             return false;
         }
 
         // The instruction pointer points to the next address, so to get the address we came from, we subtract 1.
         // findLine matches the address to the closest address <= the one we give, so it finds the one we need
-        uint64_t adjustedAddress = ((uint64_t)nativeInstructionPointer) - ((uint64_t)os::Image::GetImageBase()) - 1;
+        uint64_t adjustedAddress = ((uint64_t)address) - ((uint64_t)os::Image::GetImageBase()) - 1;
 
 #if IL2CPP_TARGET_ANDROID
         // We don't seem to need to subtract by one for Android
@@ -259,11 +281,36 @@ namespace utils
             return false;
         }
 
-        usymliteLine line = FindLine(adjustedAddress);
+        line = FindLine(adjustedAddress);
 
         // End of symbol entries are placed to indicate that we're past the end of a C# function.
         // These EOS entries have their Line and FileName set to 0xFFFFFFFF
         if (line.line == noLine)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    bool DebugSymbolReader::GetSourceLocation(void* nativeInstructionPointer, SourceLocation& sourceLocation)
+    {
+        usymliteLine line;
+        if (!GetUsymLine(nativeInstructionPointer, line))
+        {
+            return false;
+        }
+
+        sourceLocation.filePath = GetString(line.fileName);
+        sourceLocation.lineNumber = line.line;
+
+        return true;
+    }
+
+    bool DebugSymbolReader::AddStackFrames(void* nativeInstructionPointer, std::vector<Il2CppStackFrameInfo>* stackFrames)
+    {
+        usymliteLine line;
+        if (!GetUsymLine(nativeInstructionPointer, line))
         {
             return false;
         }
@@ -273,13 +320,9 @@ namespace utils
         return true;
     }
 
-#endif
-
     bool DebugSymbolReader::DebugSymbolsAvailable()
     {
-        #if IL2CPP_TINY
-        return false;
-        #elif IL2CPP_MONO_DEBUGGER
+        #if IL2CPP_MONO_DEBUGGER
         return true;
         #else
         return s_usym.debugSymbolData != NULL;

@@ -93,7 +93,8 @@ void    UnitySetLogEntryHandler(LogEntryHandler newHandler);
 // WARNING: old UnityRegisterRenderingPlugin will become obsolete soon
 void    UnityRegisterRenderingPlugin(UnityPluginSetGraphicsDeviceFunc setDevice, UnityPluginRenderMarkerFunc renderMarker);
 
-void    UnityRegisterRenderingPluginV5(UnityPluginLoadFunc loadPlugin, UnityPluginUnloadFunc unloadPlugin);
+void    UnityRegisterRenderingPluginV5(UnityPluginLoadFunc loadPlugin, UnityPluginUnloadFunc unloadPlugin) __attribute__((deprecated("Renamed to UnityRegisterPlugin", "UnityRegisterPlugin")));
+void    UnityRegisterPlugin(UnityPluginLoadFunc loadPlugin, UnityPluginUnloadFunc unloadPlugin);
 void    UnityRegisterAudioPlugin(UnityPluginGetAudioEffectDefinitionsFunc getAudioEffectDefinitions);
 
 
@@ -128,6 +129,8 @@ int     UnityUseAnimatedAutorotation(void);
 int     UnityGetDesiredMSAASampleCount(int defaultSampleCount);
 int     UnityGetSRGBRequested(void);
 int     UnityGetWideColorRequested(void);
+void    UnitySetEDRValues(float maxEDRValue, float currentEDRValue);
+void    UnitySetHDRMode(int hdrMode);
 int     UnityGetHDRModeRequested(void);
 int     UnityGetShowActivityIndicatorOnLoading(void);
 int     UnityGetAccelerometerFrequency(void);
@@ -275,6 +278,7 @@ void            UnityGetNiceKeyname(int key, char* buffer, int maxLen);
 void            UnityGfxInitedCallback(void);
 void            UnityPresentContextCallback(struct UnityFrameStats const* frameStats);
 void            UnityFramerateChangeCallback(int targetFPS);
+void            UnitySelectRenderingAPI(void);
 int             UnitySelectedRenderingAPI(void);
 int             UnityIsBatchmode(void);
 

@@ -1,12 +1,26 @@
 #include "DisplayManager.h"
-#include "UI/UnityView.h"
 
 #include "UnityAppController.h"
+#include "UI/UnityView.h"
 #include "UI/UnityAppController+ViewHandling.h"
 
-#import <QuartzCore/QuartzCore.h>
 #import <CoreGraphics/CoreGraphics.h>
-#include "UnityMetalSupport.h"
+#import <Metal/Metal.h>
+#import <QuartzCore/QuartzCore.h>
+
+#if !(defined(__IPHONE_16_0) || defined(__TVOS_16_0))
+@interface CAMetalLayer (UnityForSdk16)
+{
+}
+@property BOOL wantsExtendedDynamicRangeContent API_AVAILABLE(macos(10.11), ios(16.0), macCatalyst(16.0)) API_UNAVAILABLE(tvos, watchos);
+@end
+@interface UIScreen (UnityForSdk16)
+{
+}
+@property CGFloat potentialEDRHeadroom API_AVAILABLE(macos(10.11), ios(16.0), tvos(16.0), macCatalyst(16.0)) API_UNAVAILABLE(watchos);
+@property CGFloat currentEDRHeadroom API_AVAILABLE(macos(10.11), ios(16.0), tvos(16.0), macCatalyst(16.0)) API_UNAVAILABLE(watchos);
+@end
+#endif
 
 static DisplayManager* _DisplayManager = nil;
 
@@ -66,7 +80,6 @@ static DisplayManager* _DisplayManager = nil;
     }
     return self;
 }
-
 #else
 - (id)init
 {
@@ -78,7 +91,6 @@ static DisplayManager* _DisplayManager = nil;
     }
     return self;
 }
-
 #endif
 
 - (void)createWithWindow:(UIWindow*)window andView:(UIView*)view
@@ -104,7 +116,13 @@ static DisplayManager* _DisplayManager = nil;
     {
 #if !PLATFORM_VISIONOS
         UIWindow* window = [[UIWindow alloc] initWithFrame: _screen.bounds];
+
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        // [UIWindow setScreen:] is deprecated in favor of [UIWindow setWindowScene:], but we are not yet scenes based
+        // this API works perfectly fine for now, so we use it until we rewrite/modernize trampoline to be Scene-based
         window.screen = _screen;
+    #pragma clang diagnostic pop
 
         UIView* view = [(useForRendering ? [UnityRenderingView alloc] : [UIView alloc]) initWithFrame: _screen.bounds];
         view.contentScaleFactor = UnityScreenScaleFactor(_screen);
@@ -126,8 +144,14 @@ static DisplayManager* _DisplayManager = nil;
 - (void)shouldShowWindow:(BOOL)show
 {
     _window.hidden = show ? NO : YES;
+
 #if !PLATFORM_VISIONOS
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    // [UIWindow setScreen:] is deprecated in favor of [UIWindow setWindowScene:], but we are not yet scenes based
+    // this API works perfectly fine for now, so we use it until we rewrite/modernize trampoline to be Scene-based
     _window.screen = show ? _screen : nil;
+#pragma clang diagnostic pop
 #endif
 }
 
@@ -143,7 +167,6 @@ static DisplayManager* _DisplayManager = nil;
         UnityDisplaySurfaceMTL* surf = new UnityDisplaySurfaceMTL();
         surf->layer         = (CAMetalLayer*)_view.layer;
         surf->device        = UnityGetMetalDevice();
-        surf->commandQueue  = [surf->device newCommandQueueWithMaxCommandBufferCount: UnityCommandQueueMaxCommandBufferCountMTL()];
         ret = surf;
     }
     else
@@ -170,6 +193,7 @@ static DisplayManager* _DisplayManager = nil;
     else
         _screenSize = screenSize;
 
+    bool hdrChanged         = surface->hdr != params.hdr;
     bool systemSizeChanged  = surface->systemW != _screenSize.width || surface->systemH != _screenSize.height;
     bool msaaChanged        = surface->msaaSamples != params.msaaSampleCount;
     bool depthFmtChanged    = surface->disableDepthAndStencil != params.disableDepthAndStencil;
@@ -186,8 +210,8 @@ static DisplayManager* _DisplayManager = nil;
         renderSizeChanged = true;
     }
 
-    bool recreateSystemSurface      = systemSizeChanged;
-    bool recreateRenderingSurface   = systemSizeChanged || renderSizeChanged || msaaChanged || cvCacheChanged;
+    bool recreateSystemSurface      = systemSizeChanged || hdrChanged;
+    bool recreateRenderingSurface   = systemSizeChanged || renderSizeChanged || msaaChanged || cvCacheChanged || hdrChanged;
     bool recreateDepthbuffer        = systemSizeChanged || renderSizeChanged || msaaChanged || depthFmtChanged || memorylessChanged;
 
     surface->disableDepthAndStencil = params.disableDepthAndStencil;
@@ -222,6 +246,17 @@ static DisplayManager* _DisplayManager = nil;
     if (recreateSystemSurface || recreateRenderingSurface || recreateDepthbuffer)
         CreateUnityRenderBuffers(surface);
 
+    if (recreateSystemSurface || recreateRenderingSurface)
+    {
+        UnityDisplaySurfaceMTL* mtlSurf = (UnityDisplaySurfaceMTL*)surface;
+#if !PLATFORM_TVOS
+        if (@available(iOS 16.0, *))
+        {
+            mtlSurf->layer.wantsExtendedDynamicRangeContent = surface->hdr != 0;
+        }
+#endif
+        UnitySetHDRMode(surface->hdr);
+    }
     _surface = surface;
 #if !PLATFORM_VISIONOS
     UnityInvalidateDisplayDataCache((__bridge void*)_screen);
@@ -259,6 +294,25 @@ static DisplayManager* _DisplayManager = nil;
 
 - (void)present
 {
+#if !PLATFORM_VISIONOS
+    CGFloat maxEDR = 1.f;
+    CGFloat currentEDR = 1.f;
+    if (_screen.captured)
+    {
+        maxEDR = 1.f;
+        currentEDR = 1.f;
+    }
+    else
+    {
+        if (@available(iOS 16.0, tvOS 16.0, *))
+        {
+            maxEDR = _screen.potentialEDRHeadroom;
+            currentEDR = _screen.currentEDRHeadroom;
+        }
+    }
+    UnitySetEDRValues(maxEDR, currentEDR);
+#endif
+
     PreparePresent(self.surface);
     Present(self.surface);
 
@@ -527,7 +581,6 @@ static DisplayManager* _DisplayManager = nil;
 
     return _DisplayManager;
 }
-
 @end
 #endif
 
@@ -772,7 +825,6 @@ extern "C" bool UnityIsFullscreen()
 
     return screenSize.width == viewSize.width && screenSize.height == viewSize.height;
 }
-
 #else
 extern "C" int UnityMainScreenRefreshRate()
 {
@@ -802,5 +854,4 @@ extern "C" bool UnityIsFullscreen()
 {
     return false;
 }
-
 #endif

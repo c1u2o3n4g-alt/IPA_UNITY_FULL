@@ -58,7 +58,11 @@
 // For a platform friendly implementation, use `BASELIB_DEBUG_TRAP`
 #define COMPILER_DEBUG_TRAP()               __builtin_debugtrap()
 
-#define COMPILER_WARN_UNUSED_RESULT         __attribute__((warn_unused_result))
+#if __cplusplus >= 201703L
+    #define COMPILER_WARN_UNUSED_RESULT         [[nodiscard]]
+#else
+    #define COMPILER_WARN_UNUSED_RESULT         __attribute__((warn_unused_result))
+#endif
 
 // Warning management
 // pragma message on clang does always generate a warning that cannot be disabled, therefore the clang version

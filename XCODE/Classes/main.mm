@@ -163,7 +163,7 @@ if([obj respondsToSelector:sel])                        \
 @end
 
 
-#if TARGET_IPHONE_SIMULATOR && TARGET_TVOS_SIMULATOR
+#if TARGET_OS_SIMULATOR
 #include <pthread.h>
 
 extern "C" int pthread_cond_init$UNIX2003(pthread_cond_t *cond, const pthread_condattr_t *attr)
@@ -176,4 +176,4 @@ extern "C" int pthread_cond_timedwait$UNIX2003(pthread_cond_t *cond, pthread_mut
     const struct timespec *abstime)
 { return pthread_cond_timedwait(cond, mutex, abstime); }
 
-#endif // TARGET_IPHONE_SIMULATOR && TARGET_TVOS_SIMULATOR
+#endif // TARGET_OS_SIMULATOR

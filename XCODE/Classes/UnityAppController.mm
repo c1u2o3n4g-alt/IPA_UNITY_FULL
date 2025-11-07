@@ -8,6 +8,7 @@
 #import <QuartzCore/CADisplayLink.h>
 #import <Availability.h>
 #import <AVFoundation/AVFoundation.h>
+#import <GameController/GameController.h>
 
 #include <mach/mach_time.h>
 
@@ -45,15 +46,8 @@ bool _ios81orNewer = false, _ios82orNewer = false, _ios83orNewer = false, _ios90
 bool _ios100orNewer = false, _ios101orNewer = false, _ios102orNewer = false, _ios103orNewer = false;
 bool _ios110orNewer = false, _ios111orNewer = false, _ios112orNewer = false;
 bool _ios130orNewer = false, _ios140orNewer = false, _ios150orNewer = false, _ios160orNewer = false;
+bool _unityEngineLoaded = false, _unityEngineInitialized = false, _renderingInited = false, _unityAppReady = false;
 
-// minimal Unity initialization done, enough to do calls to provide data like URL launch
-bool    _unityEngineLoaded = false;
-// was core of Unity loaded (non-graphics part prior to loading first scene)
-bool    _unityEngineInitialized = false;
-// was unity rendering already inited: we should not touch rendering while this is false
-bool    _renderingInited        = false;
-// was unity inited: we should not touch unity api while this is false
-bool    _unityAppReady          = false;
 // see if there's a need to do internal player pause/resume handling
 //
 // Typically the trampoline code should manage this internally, but
@@ -73,6 +67,9 @@ NSInteger _forceInterfaceOrientationMask = 0;
 #endif
 
 @implementation UnityAppController
+{
+    UnityEngineLoadState _engineLoadState;
+}
 
 @synthesize unityView               = _unityView;
 @synthesize unityDisplayLink        = _displayLink;
@@ -80,6 +77,7 @@ NSInteger _forceInterfaceOrientationMask = 0;
 @synthesize rootView                = _rootView;
 @synthesize rootViewController      = _rootController;
 @synthesize mainDisplay             = _mainDisplay;
+@synthesize engineLoadState         = _engineLoadState;
 @synthesize renderDelegate          = _renderDelegate;
 @synthesize quitHandler             = _quitHandler;
 
@@ -117,13 +115,28 @@ NSInteger _forceInterfaceOrientationMask = 0;
 
 - (void)startUnity:(UIApplication*)application
 {
-    NSAssert(_unityAppReady == NO, @"[UnityAppController startUnity:] called after Unity has been initialized");
+    NSAssert(self.engineLoadState < kUnityEngineLoadStateAppReady, @"[UnityAppController startUnity:] called after Unity has been initialized");
 
     UnityInitApplicationGraphics();
 
 #if !PLATFORM_VISIONOS
     // we make sure that first level gets correct display list and orientation
     [[DisplayManager Instance] updateDisplayListCacheInUnity];
+#endif
+
+#if UNITY_HAS_VISIONOSSDK_2_0
+    // https://developer.apple.com/documentation/visionos-release-notes/visionos-2-release-notes
+    // Game controllers can be used to interact with system UI on visionOS.
+    // Apps built with the visionOS 2 SDK that use the Game Controller
+    // framework for input in one or more of their views must add an instance
+    // of GCEventInteraction to those views (UIKit) or apply a
+    // handlesGameControllerEvents(matching: .gamepad) modifier to those views (SwiftUI).
+    GCEventInteraction* gamepadInteraction = [[GCEventInteraction alloc] init];
+    gamepadInteraction.handledEventTypes = GCUIEventTypeGamepad;
+    NSMutableArray* interactions = [NSMutableArray array];
+    [interactions addObject:gamepadInteraction];
+    [interactions addObjectsFromArray:_rootView.interactions];
+    _rootView.interactions = interactions;
 #endif
 
     UnityLoadApplication();
@@ -159,7 +172,7 @@ extern "C" void UnityDestroyDisplayLink()
 
 extern "C" void UnityRequestUnload()
 {
-    _unityAppReady = false;
+    [GetAppController() downgradeEngineLoadState: kUnityEngineLoadStateRenderingInitialized];
     [[NSNotificationCenter defaultCenter] postNotificationName: kUnityDidUnload object: nil];
 }
 
@@ -190,7 +203,9 @@ extern "C" void UnityCleanupTrampoline()
 
     Profiler_UninitProfiler();
 
+#if !PLATFORM_VISIONOS
     [DisplayManager Destroy];
+#endif
 
     UnityDestroyDisplayLink();
 
@@ -207,7 +222,7 @@ extern "C" void UnityCleanupTrampoline()
 
     // During splash screen show phase no forced orientations should be allowed.
     // This will prevent unwanted rotation while splash screen is on and application is not yet ready to present (Ex. Fogbugz cases: 1190428, 1269547).
-    if (!_unityAppReady)
+    if (self.engineLoadState < kUnityEngineLoadStateAppReady)
         return [_rootController supportedInterfaceOrientations];
 
     // Some presentation controllers (e.g. UIImagePickerController) require portrait orientation and will throw exception if it is not supported.
@@ -318,7 +333,7 @@ extern "C" void UnityCleanupTrampoline()
     return nil;
 }
 
-- (UIWindowScene*)pickStartupWindowScene:(NSSet<UIScene*>*)scenes API_AVAILABLE(ios(13.0), tvos(13.0))
+- (UIWindowScene*)pickStartupWindowScene:(NSSet<UIScene*>*)scenes
 {
     // if we have scene with UISceneActivationStateForegroundActive - pick it
     // otherwise UISceneActivationStateForegroundInactive will work
@@ -347,7 +362,7 @@ extern "C" void UnityCleanupTrampoline()
 {
     ::printf("-> applicationDidFinishLaunching()\n");
 
-    // send notfications
+    // make sure orientation notifications are sent
 #if !PLATFORM_TVOS && !PLATFORM_VISIONOS
     if ([UIDevice currentDevice].generatesDeviceOrientationNotifications == NO)
         [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
@@ -365,48 +380,49 @@ extern "C" void UnityCleanupTrampoline()
 
 - (void)initUnityApplicationNoGraphics
 {
-    if (_unityEngineLoaded)
-        return;
-    _unityEngineLoaded = true;
-    UnityInitApplicationNoGraphics(UnityDataBundleDir());
+    if ([self advanceEngineLoadState: kUnityEngineLoadStateMinimal])
+        UnityInitApplicationNoGraphics(UnityDataBundleDir());
 }
 
 - (void)initUnityWithApplication:(UIApplication*)application
 {
-    if (_unityEngineInitialized)
+    if (self.engineLoadState >= kUnityEngineLoadStateCoreInitialized)
         return;
-    _unityEngineInitialized = true;
-
     // basic unity init
     [self initUnityApplicationNoGraphics];
+    // initUnityApplicationNoGraphics progresses the state & does initialization if necessary
+    // so the next state bump has to be after it to not skip the init part
+    [self advanceEngineLoadState: kUnityEngineLoadStateCoreInitialized];
 
-    [self selectRenderingAPI];
-    [UnityRenderingView InitializeForAPI: self.renderingAPI];
+    // we want to initialize DisplayManager first, since unity view might need it on creation
+    [DisplayManager Initialize];
 
 #if !PLATFORM_VISIONOS
-    if (@available(iOS 13, tvOS 13, *))
-        _window = [[UIWindow alloc] initWithWindowScene: [self pickStartupWindowScene: application.connectedScenes]];
-    else
-        _window = [[UIWindow alloc] initWithFrame: [UIScreen mainScreen].bounds];
+    // init main window
+    _window = [[UIWindow alloc] initWithWindowScene: [self pickStartupWindowScene: application.connectedScenes]];
 #else
-    _window = [[UIWindow alloc] init]; 
+    _window = [[UIWindow alloc] init];
 #endif
 
+    // init unity view
+    [self selectRenderingAPI];
+    [UnityRenderingView InitializeForAPI: self.renderingAPI];
     _unityView = [self createUnityView];
 
-
-    [DisplayManager Initialize];
+    // connect main display with window and unity view
     _mainDisplay = [DisplayManager Instance].mainDisplay;
     [_mainDisplay createWithWindow: _window andView: _unityView];
 
+    // create UI hierarchy, and proceed with unity graphics init
     [self createUI];
     [self preStartUnity];
 
     // if you wont use keyboard you may comment it out at save some memory
     [KeyboardDelegate Initialize];
 
-#if UNITY_DEVELOPER_BUILD
+#if UNITY_DEVELOPER_BUILD && !PLATFORM_VISIONOS
     // Causes a black screen after splash screen, but would deadlock if waiting for manged debugger otherwise
+    // also causes issues on visionOS, but we don't have wait for debugger dialog there
     [self performSelector: @selector(startUnity:) withObject: application afterDelay: 0];
 #else
     [self startUnity: application];
@@ -431,7 +447,7 @@ extern "C" void UnityCleanupTrampoline()
     ::printf("-> applicationWillEnterForeground()\n");
 
     // applicationWillEnterForeground: might sometimes arrive *before* actually initing unity (e.g. locking on startup)
-    if (_unityAppReady)
+    if (self.engineLoadState >= kUnityEngineLoadStateAppReady)
     {
         // if we were showing video before going to background - the view size may be changed while we are in background
         [GetAppController().unityView recreateRenderingSurfaceIfNeeded];
@@ -444,7 +460,7 @@ extern "C" void UnityCleanupTrampoline()
 
     [self removeSnapshotViewController];
 
-    if (_unityAppReady)
+    if (self.engineLoadState >= kUnityEngineLoadStateAppReady)
     {
         if (UnityIsPaused() && _wasPausedExternal == false)
         {
@@ -520,7 +536,7 @@ extern "C" void UnityCleanupTrampoline()
 {
     ::printf("-> applicationWillResignActive()\n");
 
-    if (_unityAppReady)
+    if (self.engineLoadState >= kUnityEngineLoadStateAppReady)
     {
         UnitySetPlayerFocus(0);
 
@@ -563,11 +579,14 @@ extern "C" void UnityCleanupTrampoline()
 
     // Only clean up if Unity has finished initializing, else the clean up process will crash,
     // this happens if the app is force closed immediately after opening it.
-    if (_unityAppReady)
+    if (self.engineLoadState >= kUnityEngineLoadStateAppReady)
     {
         // make sure that we are in a "unity cannot be touched" state
         // if there was some complex UI shown when terminating, we can get extra UI calls from iOS after applicationWillTerminate:
         // and we want to make sure we never do anything touching unity runtime at this point
+        _engineLoadState = kUnityEngineLoadStateMinimal;
+
+        // keep "old" way of tracking state synced
         _unityAppReady = _renderingInited = _unityEngineInitialized = false;
         _didResignActive = true;
 
@@ -580,6 +599,57 @@ extern "C" void UnityCleanupTrampoline()
 {
     NSDictionary* arg = @{identifier: completionHandler};
     AppController_SendNotificationWithArg(kUnityHandleEventsForBackgroundURLSession, arg);
+}
+
+// advance the load state to newState, if it's not there or higher yet
+// returns YES if state was less than newState
+// returns NO if previous state was already the requested one or even higher than that
+- (BOOL)advanceEngineLoadState:(UnityEngineLoadState)newState
+{
+    if (_engineLoadState >= newState)
+        return NO;
+    _engineLoadState = newState;
+
+    // Old individual variables; fall-through because higher level also has to set all lower ones
+    switch (_engineLoadState)
+    {
+        case kUnityEngineLoadStateAppReady:
+            _unityAppReady = true;
+        case kUnityEngineLoadStateRenderingInitialized:
+            _renderingInited = true;
+        case kUnityEngineLoadStateCoreInitialized:
+            _unityEngineInitialized = true;
+        case kUnityEngineLoadStateMinimal:
+            _unityEngineLoaded = true;
+        case kUnityEngineLoadStateNotStarted:
+            break;
+    }
+
+    return YES;
+}
+
+// the opposite of advanceEngineLoadState:
+- (BOOL)downgradeEngineLoadState:(UnityEngineLoadState)newState
+{
+    if (newState >= _engineLoadState)
+        return NO;
+    _engineLoadState = newState;
+
+    switch (_engineLoadState)
+    {
+        case kUnityEngineLoadStateNotStarted:
+            _unityEngineLoaded = false;
+        case kUnityEngineLoadStateMinimal:
+            _unityEngineInitialized = false;
+        case kUnityEngineLoadStateCoreInitialized:
+            _renderingInited = false;
+        case kUnityEngineLoadStateRenderingInitialized:
+            _unityAppReady = false;
+        case kUnityEngineLoadStateAppReady:
+            break;
+    }
+
+    return YES;
 }
 
 @end
@@ -669,7 +739,7 @@ void UnityInitTrampoline()
 
     AddNewAPIImplIfNeeded();
 
-#if !TARGET_IPHONE_SIMULATOR
+#if !TARGET_OS_SIMULATOR
     // Use NSLog logging if a debugger is not attached, otherwise we write to stdout.
     if (!isDebuggerAttachedToConsole())
         UnitySetLogEntryHandler(LogToNSLogHandler);

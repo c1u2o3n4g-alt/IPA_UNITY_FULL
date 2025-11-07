@@ -13,7 +13,6 @@
 #include <utility>
 
 extern bool _skipPresent;
-extern bool _unityAppReady;
 
 static BOOL _shouldUseDefaultViewControllerForFixedOrientations = NO;
 
@@ -136,8 +135,10 @@ static BOOL _shouldUseDefaultViewControllerForFixedOrientations = NO;
     NSAssert(_unityView != nil, @"_unityView should be inited at this point");
     NSAssert(_window != nil, @"_window should be inited at this point");
 
+#if PLATFORM_IOS
     if (@available(iOS 16.0, *))    _shouldUseDefaultViewControllerForFixedOrientations = YES;
     else                            _shouldUseDefaultViewControllerForFixedOrientations = NO;
+#endif
 
     _rootController = [self createRootViewController];
 
@@ -182,7 +183,7 @@ static BOOL _shouldUseDefaultViewControllerForFixedOrientations = NO;
     HideActivityIndicator();
 
     // make sure that we start up with correctly created/inited rendering surface
-    // NB: recreateRenderingSurface won't go into rendering because _unityAppReady is false
+    // NB: recreateRenderingSurface won't go into rendering because AppReady state is not set
 #if UNITY_SUPPORT_ROTATION
     [self checkOrientationRequest];
 #endif
@@ -203,7 +204,7 @@ static BOOL _shouldUseDefaultViewControllerForFixedOrientations = NO;
     // but this frame now is actually the first one we want to process/draw
     // so all the recreateSurface before now (triggered by reorientation) should simply change extents
 
-    _unityAppReady = true;
+    [self advanceEngineLoadState: kUnityEngineLoadStateAppReady];
 
     // why we skip present:
     // this will be the first frame to draw, so Start methods will be called
@@ -412,7 +413,7 @@ static BOOL _shouldUseDefaultViewControllerForFixedOrientations = NO;
 
 - (void)orientInterface:(UIInterfaceOrientation)orient
 {
-    if (_unityAppReady)
+    if (self.engineLoadState >= kUnityEngineLoadStateAppReady)
         UnityFinishRendering();
 
     [KeyboardDelegate StartReorientation];
@@ -431,7 +432,12 @@ static BOOL _shouldUseDefaultViewControllerForFixedOrientations = NO;
         [self interfaceDidChangeOrientationFrom: oldOrient];
 
 #if !PLATFORM_VISIONOS
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        // this was deprecated in favor of [UIWindowScene setInterfaceOrientation:]
+        // this API works perfectly fine for now, so we use it until we rewrite/modernize trampoline to be Scene-based
         [UIApplication sharedApplication].statusBarOrientation = orient;
+    #pragma clang diagnostic pop
 #endif
     }
     [CATransaction commit];

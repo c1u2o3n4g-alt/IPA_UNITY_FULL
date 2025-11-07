@@ -483,46 +483,36 @@ static NSMutableArray<CameraCaptureDevice*> *videoCaptureDevices = nil;
     AVCaptureDeviceType type = _device.deviceType;
     if ([type isEqualToString: AVCaptureDeviceTypeBuiltInWideAngleCamera])
         return kWebCamWideAngle;
+    if ([type isEqualToString: AVCaptureDeviceTypeBuiltInUltraWideCamera])
+        return kWebCamUltraWideAngle;
     if ([type isEqualToString: AVCaptureDeviceTypeBuiltInTelephotoCamera])
         return kWebCamTelephoto;
     if ([type isEqualToString: AVCaptureDeviceTypeBuiltInDualCamera] && [self isColorAndDepthCaptureDevice])
         return kWebCamColorAndDepth;
-    if (@available(iOS 13, *))
-    {
-        if ([type isEqualToString: AVCaptureDeviceTypeBuiltInUltraWideCamera])
-            return kWebCamUltraWideAngle;
-        if ([type isEqualToString: AVCaptureDeviceTypeBuiltInDualWideCamera])
-            return kWebCamWideAngle;
-        if ([type isEqualToString: AVCaptureDeviceTypeBuiltInTripleCamera])
-            return kWebCamUltraWideAngle;
-    }
-    else
-    {
-        // Only works if device language is English; this was original impl, keeping to not regress
-        if ([self->_device.localizedName containsString: @"Ultra Wide"])
-            return kWebCamUltraWideAngle;
-    }
+    if ([type isEqualToString: AVCaptureDeviceTypeBuiltInDualWideCamera])
+        return kWebCamWideAngle;
+    if ([type isEqualToString: AVCaptureDeviceTypeBuiltInTripleCamera])
+        return kWebCamUltraWideAngle;
 #if defined(__IPHONE_17_0) || defined(__TVOS_17_0)
     if (@available(iOS 17.0, *))
     {
+
         if ([type isEqualToString: AVCaptureDeviceTypeContinuityCamera])
             return kWebCamWideAngle;
     }
 #endif
 #endif
-#if PLATFORM_IOS
-#ifdef __IPHONE_15_4
+#if PLATFORM_IOS && defined(__IPHONE_15_4)
     if (@available(iOS 15.4, *))
     {
         if ([type isEqualToString: AVCaptureDeviceTypeBuiltInLiDARDepthCamera])
             return kWebCamColorAndDepth;
     }
-#endif
     if ([type isEqualToString: AVCaptureDeviceTypeBuiltInTrueDepthCamera] && [self isColorAndDepthCaptureDevice])
         return kWebCamColorAndDepth;
 #endif
 
-    return kWebCamWideAngle;
+    return kWebCamUnknown;
 }
 
 - (void)fillCaptureDeviceResolutions
@@ -661,7 +651,7 @@ static NSMutableArray<CameraCaptureDevice*> *videoCaptureDevices = nil;
 
 + (void)createCameraCaptureDevicesArray
 {
-    videoCaptureDevices = [NSMutableArray arrayWithCapacity: 2];
+    videoCaptureDevices = [NSMutableArray arrayWithCapacity: 8];
 }
 
 + (void)addCameraCaptureDevice:(AVCaptureDevice*)device
@@ -708,10 +698,12 @@ extern "C" void UnityEnumVideoCaptureDevices(void* udata, void(*callback)(void* 
     if ([AVCaptureDevice authorizationStatusForMediaType: AVMediaTypeVideo] != AVAuthorizationStatusAuthorized)
         return;
 
+    const unsigned kMaxResolutions = 16;
+    int resolutions[kMaxResolutions * 2];
     for (CameraCaptureDevice *cameraCaptureDevice in videoCaptureDevices)
     {
         int resCount = (int)[cameraCaptureDevice->_resolutions count];
-        int *resolutions = new int[resCount * 2];
+        assert(resCount <= kMaxResolutions && "Increase the constant above");
         for (int i = 0; i < resCount; ++i)
         {
             resolutions[i * 2] = (int)[cameraCaptureDevice->_resolutions[i] CGSizeValue].width;
@@ -720,7 +712,6 @@ extern "C" void UnityEnumVideoCaptureDevices(void* udata, void(*callback)(void* 
         NSString* localizedName = cameraCaptureDevice->_device.localizedName;
         const char* deviceName = localizedName != nil ? localizedName.UTF8String : "";
         callback(udata, deviceName, cameraCaptureDevice->_frontFacing, cameraCaptureDevice->_autoFocusPointSupported, cameraCaptureDevice->_kind, resolutions, resCount);
-        delete[] resolutions;
     }
 }
 

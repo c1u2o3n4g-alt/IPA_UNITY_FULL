@@ -114,7 +114,6 @@ START_STRUCT(UnityDisplaySurfaceMTL, UnityDisplaySurfaceBase)
 OBJC_OBJECT_PTR CAMetalLayer *       layer;
 OBJC_OBJECT_PTR MTLDeviceRef         device;
 
-OBJC_OBJECT_PTR MTLCommandQueueRef  commandQueue;
 OBJC_OBJECT_PTR CAMetalDrawableRef  drawable;
 OBJC_OBJECT_PTR MTLTextureRef       drawableProxyRT[kUnityNumOffscreenSurfaces];
 UnityRenderBufferHandle             drawableProxyRS[kUnityNumOffscreenSurfaces];
