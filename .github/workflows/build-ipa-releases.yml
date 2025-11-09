@@ -33,7 +33,7 @@ jobs:
         # ============================================
         # ⚙️ CẤU HÌNH: Thay đổi 2 dòng này
         # ============================================
-        RELEASE_TAG="v1.0.20251109-170235"  # 👈 Thay bằng tag release của bạn (ví dụ: v1.0.0, v1.0.1, ...)
+        RELEASE_TAG="v1.0.20251109-172848"  # 👈 Thay bằng tag release của bạn (ví dụ: v1.0.0, v1.0.1, ...)
         ASSET_NAME="xcode-assets.zip"  # 👈 Thay bằng tên file ZIP bạn đã upload (ví dụ: xcode-assets.zip)
         # ============================================
         
