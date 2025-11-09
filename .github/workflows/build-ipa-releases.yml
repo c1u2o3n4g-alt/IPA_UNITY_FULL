@@ -1,0 +1,209 @@
+name: Build iOS IPA (GitHub Releases)
+
+# Workflow này sử dụng GitHub Releases để lưu trữ file LFS lớn
+# Download từ Releases thay vì Git LFS → Không tốn LFS bandwidth
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_configuration:
+        description: 'Build configuration (Release or Debug)'
+        required: false
+        default: 'Release'
+        type: choice
+        options:
+          - Release
+          - Debug
+
+jobs:
+  build-ipa:
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout repository (without LFS)
+      uses: actions/checkout@v4
+      with:
+        lfs: false  # Không fetch LFS
+        fetch-depth: 0
+    
+    - name: Download large files from GitHub Releases
+      run: |
+        echo "📥 Downloading large files from GitHub Releases..."
+        
+        # ============================================
+        # ⚙️ CẤU HÌNH: Thay đổi 2 dòng này
+        # ============================================
+        RELEASE_TAG="v1.0.20251109-170235"  # 👈 Thay bằng tag release của bạn (ví dụ: v1.0.0, v1.0.1, ...)
+        ASSET_NAME="xcode-assets.zip"  # 👈 Thay bằng tên file ZIP bạn đã upload (ví dụ: xcode-assets.zip)
+        # ============================================
+        
+        REPO="${{ github.repository }}"
+        OWNER=$(echo "$REPO" | cut -d'/' -f1)
+        REPO_NAME=$(echo "$REPO" | cut -d'/' -f2)
+        
+        echo "🔍 Tìm Release: $RELEASE_TAG trong repository $REPO"
+        
+        # Lấy thông tin Release từ GitHub API
+        RELEASE_INFO=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          "https://api.github.com/repos/$REPO/releases/tags/$RELEASE_TAG" || echo "")
+        
+        if [ -z "$RELEASE_INFO" ] || echo "$RELEASE_INFO" | grep -q "Not Found"; then
+          echo "❌ Lỗi: Không tìm thấy Release với tag '$RELEASE_TAG'"
+          echo "💡 Hãy kiểm tra:"
+          echo "   1. Tag release có đúng không? (ví dụ: v1.0.0)"
+          echo "   2. Release đã được publish chưa? (không phải draft)"
+          echo "   3. Xem hướng dẫn trong file GITHUB_RELEASES_GUIDE.md"
+          exit 1
+        fi
+        
+        # Tìm asset ID từ tên file
+        ASSET_ID=$(echo "$RELEASE_INFO" | grep -o "\"id\":[0-9]*,\"name\":\"$ASSET_NAME\"" | grep -o "\"id\":[0-9]*" | cut -d':' -f2 || echo "")
+        
+        if [ -z "$ASSET_ID" ]; then
+          echo "❌ Lỗi: Không tìm thấy file '$ASSET_NAME' trong Release '$RELEASE_TAG'"
+          echo "💡 Các file có sẵn trong Release:"
+          echo "$RELEASE_INFO" | grep -o "\"name\":\"[^\"]*\"" | sed 's/"name":"//g' | sed 's/"//g' || echo "   (Không có file nào)"
+          echo ""
+          echo "💡 Hãy kiểm tra:"
+          echo "   1. Tên file có đúng không? (ví dụ: xcode-assets.zip)"
+          echo "   2. File đã được upload vào Release chưa?"
+          exit 1
+        fi
+        
+        echo "✅ Tìm thấy file: $ASSET_NAME (ID: $ASSET_ID)"
+        
+        # Tạo thư mục tạm
+        mkdir -p XCODE/temp
+        
+        # Download file từ GitHub Releases
+        echo "⬇️ Đang download $ASSET_NAME..."
+        curl -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/octet-stream" \
+          "https://api.github.com/repos/$REPO/releases/assets/$ASSET_ID" \
+          -o "XCODE/temp/$ASSET_NAME" || {
+          echo "❌ Lỗi: Không thể download file"
+          exit 1
+        }
+        
+        # Kiểm tra file đã download
+        if [ ! -f "XCODE/temp/$ASSET_NAME" ]; then
+          echo "❌ Lỗi: File không được download"
+          exit 1
+        fi
+        
+        FILE_SIZE=$(ls -lh "XCODE/temp/$ASSET_NAME" | awk '{print $5}')
+        echo "✅ Download thành công: $ASSET_NAME ($FILE_SIZE)"
+        
+        # Giải nén file
+        echo "📦 Đang giải nén $ASSET_NAME..."
+        cd XCODE
+        unzip -q "temp/$ASSET_NAME" -d . || {
+          echo "❌ Lỗi: Không thể giải nén file ZIP"
+          echo "💡 Kiểm tra file ZIP có bị hỏng không"
+          exit 1
+        }
+        cd ..
+        
+        # Xóa file ZIP tạm
+        rm -f "XCODE/temp/$ASSET_NAME"
+        rmdir "XCODE/temp" 2>/dev/null || true
+        
+        echo "✅ Hoàn tất! File đã được giải nén vào thư mục XCODE/"
+        
+        # Kiểm tra các thư mục quan trọng
+        if [ -d "XCODE/Data" ]; then
+          echo "✅ Thư mục Data/ đã có"
+        else
+          echo "⚠️ Cảnh báo: Thư mục Data/ không tìm thấy"
+        fi
+        
+        if [ -d "XCODE/Libraries" ]; then
+          echo "✅ Thư mục Libraries/ đã có"
+        else
+          echo "⚠️ Cảnh báo: Thư mục Libraries/ không tìm thấy"
+        fi
+    
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable
+        
+    - name: Show Xcode version
+      run: xcodebuild -version
+      
+    - name: Set build configuration
+      id: config
+      run: |
+        CONFIG="${{ github.event.inputs.build_configuration }}"
+        echo "config=${CONFIG:-Release}" >> $GITHUB_OUTPUT
+        echo "Build configuration: ${CONFIG:-Release}"
+        
+    - name: Build and Archive
+      run: |
+        cd XCODE
+        
+        BUILD_CONFIG="${{ steps.config.outputs.config }}"
+        SCHEME="Unity-iPhone"
+        ARCHIVE_PATH="./build/Unity-iPhone.xcarchive"
+        
+        mkdir -p build/export
+        
+        xcodebuild clean \
+          -project Unity-iPhone.xcodeproj \
+          -scheme "$SCHEME" \
+          -configuration "$BUILD_CONFIG" || true
+        
+        xcodebuild archive \
+          -project Unity-iPhone.xcodeproj \
+          -scheme "$SCHEME" \
+          -configuration "$BUILD_CONFIG" \
+          -archivePath "$ARCHIVE_PATH" \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          -destination "generic/platform=iOS" || {
+            echo "Archive with no signing failed, trying with automatic signing..."
+            xcodebuild archive \
+              -project Unity-iPhone.xcodeproj \
+              -scheme "$SCHEME" \
+              -configuration "$BUILD_CONFIG" \
+              -archivePath "$ARCHIVE_PATH" \
+              -destination "generic/platform=iOS"
+          }
+        
+    - name: Create IPA manually
+      run: |
+        cd XCODE
+        ARCHIVE_PATH="./build/Unity-iPhone.xcarchive"
+        EXPORT_PATH="./build/export"
+        
+        if [ -d "$ARCHIVE_PATH/Products/Applications" ]; then
+          APP_BUNDLE=$(find "$ARCHIVE_PATH/Products/Applications" -name "*.app" -type d | head -1)
+          
+          if [ -n "$APP_BUNDLE" ]; then
+            APP_NAME=$(basename "$APP_BUNDLE" .app)
+            IPA_NAME="${APP_NAME}.ipa"
+            
+            rm -rf "$EXPORT_PATH/Payload"
+            mkdir -p "$EXPORT_PATH/Payload"
+            cp -R "$APP_BUNDLE" "$EXPORT_PATH/Payload/"
+            
+            cd "$EXPORT_PATH"
+            zip -r "$IPA_NAME" Payload/ -q
+            cd ../..
+            
+            echo "✅ IPA created: $EXPORT_PATH/$IPA_NAME"
+            ls -lh "$EXPORT_PATH/$IPA_NAME"
+          fi
+        fi
+        
+    - name: Upload IPA artifact
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: NROFLY.ipa
+        path: XCODE/build/export/*.ipa
+        retention-days: 30
+        if-no-files-found: warn
+        compression-level: 0
+
