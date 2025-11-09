@@ -34,3 +34,7 @@ output/
 release/
 debug/
 my_builds/
+
+# Auto-generated ZIP files for GitHub Releases (không push vào git)
+xcode-assets.zip
+*.assets.zip
