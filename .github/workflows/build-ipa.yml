@@ -17,29 +17,36 @@ jobs:
     runs-on: macos-latest
     
     steps:
-    - name: Checkout repository (with Git LFS)
+    - name: Checkout repository (without Git LFS)
       uses: actions/checkout@v4
       with:
-        lfs: true
-        fetch-depth: 0
+        lfs: false
+        fetch-depth: 1
     
-    - name: Cache Git LFS objects
-      uses: actions/cache@v3
-      with:
-        path: .git/lfs
-        key: lfs-${{ hashFiles('.gitattributes') }}-${{ hashFiles('XCODE/**') }}
-        restore-keys: |
-          lfs-${{ hashFiles('.gitattributes') }}-
-          lfs-
-
-    - name: Ensure Git LFS files are present
+    - name: Download XCODE assets from GitHub Release
       run: |
-        git lfs version || true
-        git lfs fetch --all || true
-        git lfs checkout || true
-        echo "Top large files in XCODE after LFS checkout (if any):"
-        cd XCODE
-        /usr/bin/find . -type f -size +50M -print 2>/dev/null | head -20 || true
+        RELEASE_TAG="v1.0-latest"
+        ASSET_NAME="xcode-assets.zip"
+        
+        echo "Downloading ${ASSET_NAME} from Release ${RELEASE_TAG}..."
+        
+        gh release download "${RELEASE_TAG}" \
+          --pattern "${ASSET_NAME}" \
+          --repo "${{ github.repository }}" \
+          --clobber
+        
+        if [ -f "${ASSET_NAME}" ]; then
+          echo "Extracting ${ASSET_NAME}..."
+          unzip -q "${ASSET_NAME}"
+          rm "${ASSET_NAME}"
+          echo "Assets extracted successfully"
+          ls -lh XCODE/
+        else
+          echo "Failed to download ${ASSET_NAME}"
+          exit 1
+        fi
+      env:
+        GH_TOKEN: ${{ github.token }}
       
     - name: Setup Xcode
       uses: maxim-lobanov/setup-xcode@v1
