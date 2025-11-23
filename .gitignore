@@ -21,16 +21,17 @@
 [Ll]ibrary/
 
 # Python tool (local only, not pushed to GitHub)
-auto_build_ipa.py
-AUTO_BUILD_GUIDE.md
-QUICK_START.md
-RUN.md
-CHANGELOG.md
-requirements.txt
-set_token.ps1
+# auto_build_ipa.py
+# AUTO_BUILD_GUIDE.md
+# QUICK_START.md
+# RUN.md
+# CHANGELOG.md
+# requirements.txt
+# set_token.ps1
 
 # Output directories from auto_build_ipa.py
 output/
 release/
 debug/
 my_builds/
+"xcode-assets.zip" 
