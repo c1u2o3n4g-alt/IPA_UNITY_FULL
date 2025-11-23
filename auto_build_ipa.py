@@ -133,37 +133,26 @@ def compress_xcode_assets():
             print_error("Không thể tạo file ZIP mới vì file đang bị lock và không hợp lệ")
             return None
     
-    # Các thư mục/file cần nén
-    items_to_zip = []
-    for item_name in ["Data", "Libraries", "Il2CppOutputProject"]:
-        item_path = xcode_path / item_name
-        if item_path.exists():
-            items_to_zip.append(item_path)
-    
-    if not items_to_zip:
-        print_warning("Không tìm thấy file/thư mục cần nén!")
-        return None
+    # Nén toàn bộ thư mục XCODE (không chỉ 3 thư mục con)
+    print_info(f"Nén toàn bộ thư mục {XCODE_DIR}...")
     
     # Xóa file ZIP cũ nếu có
     if zip_path.exists():
         print_info(f"Xóa file ZIP cũ: {ASSETS_ZIP}")
         zip_path.unlink()
     
-    print_info(f"Đang nén {len(items_to_zip)} item(s) thành {ASSETS_ZIP}...")
+    print_info(f"Đang nén toàn bộ thư mục {XCODE_DIR} thành {ASSETS_ZIP}...")
     
     try:
         with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
-            for item_path in items_to_zip:
-                if item_path.is_dir():
-                    for root, dirs, files in os.walk(item_path):
-                        for file in files:
-                            file_path = Path(root) / file
-                            arcname = file_path.relative_to(xcode_path.parent)
-                            zipf.write(file_path, arcname)
-                            print(f"\r   Đã nén: {arcname}", end='')
-                else:
-                    arcname = item_path.relative_to(xcode_path.parent)
-                    zipf.write(item_path, arcname)
+            # Nén toàn bộ thư mục XCODE
+            for root, dirs, files in os.walk(xcode_path):
+                for file in files:
+                    file_path = Path(root) / file
+                    # Tạo archive name tương đối từ parent của XCODE
+                    arcname = file_path.relative_to(xcode_path.parent)
+                    zipf.write(file_path, arcname)
+                    print(f"\r   Đã nén: {arcname}", end='')
         
         print()  # New line
         file_size_mb = zip_path.stat().st_size / (1024 * 1024)
