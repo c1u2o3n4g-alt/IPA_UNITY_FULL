@@ -98,6 +98,18 @@ def run_command(cmd, check=True, capture_output=False):
             sys.exit(1)
         return None
 
+def is_file_locked(file_path):
+    """Kiểm tra xem file có đang bị lock không"""
+    if not file_path.exists():
+        return False
+    try:
+        # Thử mở file để kiểm tra
+        with open(file_path, 'a'):
+            pass
+        return False
+    except (PermissionError, IOError):
+        return True
+
 def compress_xcode_assets():
     """Nén các file lớn trong XCODE thành ZIP"""
     print_step(0, "Nén file lớn từ XCODE...")
@@ -106,6 +118,20 @@ def compress_xcode_assets():
     if not xcode_path.exists():
         print_error(f"Thư mục {XCODE_DIR} không tồn tại!")
         return None
+    
+    # Kiểm tra file ZIP có đang được sử dụng không
+    zip_path = Path(ASSETS_ZIP)
+    if is_file_locked(zip_path):
+        print_warning(f"File {ASSETS_ZIP} đang được sử dụng bởi process khác!")
+        print_info("Có thể bạn đang chạy tool ở terminal khác. Đợi process đó hoàn thành hoặc dừng nó.")
+        
+        # Kiểm tra xem file có hợp lệ không
+        if zip_path.exists() and zip_path.stat().st_size > 100 * 1024 * 1024:  # > 100MB
+            print_success(f"File ZIP đã tồn tại và có vẻ hợp lệ ({zip_path.stat().st_size / (1024*1024):.2f} MB)")
+            return str(zip_path)
+        else:
+            print_error("Không thể tạo file ZIP mới vì file đang bị lock và không hợp lệ")
+            return None
     
     # Các thư mục/file cần nén
     items_to_zip = []
@@ -117,9 +143,6 @@ def compress_xcode_assets():
     if not items_to_zip:
         print_warning("Không tìm thấy file/thư mục cần nén!")
         return None
-    
-    # Tạo file ZIP
-    zip_path = Path(ASSETS_ZIP)
     
     # Xóa file ZIP cũ nếu có
     if zip_path.exists():
