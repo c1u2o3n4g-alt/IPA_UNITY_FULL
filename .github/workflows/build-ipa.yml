@@ -27,26 +27,60 @@ jobs:
       run: |
         RELEASE_TAG="v1.0-latest"
         ASSET_NAME="xcode-assets.zip"
+        REPO="${{ github.repository }}"
         
         echo "Downloading ${ASSET_NAME} from Release ${RELEASE_TAG}..."
         
-        gh release download "${RELEASE_TAG}" \
-          --pattern "${ASSET_NAME}" \
-          --repo "${{ github.repository }}" \
-          --clobber
+        # Get download URL from GitHub API
+        DOWNLOAD_URL=$(curl -s -H "Authorization: token ${{ github.token }}" \
+          "https://api.github.com/repos/${REPO}/releases/tags/${RELEASE_TAG}" | \
+          grep "browser_download_url.*${ASSET_NAME}" | \
+          cut -d '"' -f 4)
         
-        if [ -f "${ASSET_NAME}" ]; then
-          echo "Extracting ${ASSET_NAME}..."
-          unzip -q "${ASSET_NAME}"
-          rm "${ASSET_NAME}"
-          echo "Assets extracted successfully"
-          ls -lh XCODE/
-        else
-          echo "Failed to download ${ASSET_NAME}"
+        if [ -z "$DOWNLOAD_URL" ]; then
+          echo "Error: Could not find ${ASSET_NAME} in Release ${RELEASE_TAG}"
+          echo "Checking available releases..."
+          curl -s -H "Authorization: token ${{ github.token }}" \
+            "https://api.github.com/repos/${REPO}/releases" | \
+            grep -E '"tag_name"|"name"' | head -20
           exit 1
         fi
-      env:
-        GH_TOKEN: ${{ github.token }}
+        
+        echo "Download URL: ${DOWNLOAD_URL}"
+        
+        # Download the file
+        curl -L -H "Authorization: token ${{ github.token }}" \
+          -H "Accept: application/octet-stream" \
+          -o "${ASSET_NAME}" \
+          "${DOWNLOAD_URL}"
+        
+        # Verify download
+        if [ ! -f "${ASSET_NAME}" ]; then
+          echo "Error: Failed to download ${ASSET_NAME}"
+          exit 1
+        fi
+        
+        FILE_SIZE=$(stat -f%z "${ASSET_NAME}" 2>/dev/null || stat -c%s "${ASSET_NAME}")
+        echo "Downloaded ${ASSET_NAME}: ${FILE_SIZE} bytes"
+        
+        # Extract
+        echo "Extracting ${ASSET_NAME}..."
+        unzip -q "${ASSET_NAME}"
+        
+        # Verify extraction
+        if [ ! -d "XCODE" ]; then
+          echo "Error: XCODE directory not found after extraction"
+          echo "Contents of current directory:"
+          ls -la
+          exit 1
+        fi
+        
+        echo "Assets extracted successfully"
+        echo "XCODE directory contents:"
+        ls -lh XCODE/
+        
+        # Clean up
+        rm "${ASSET_NAME}"
       
     - name: Setup Xcode
       uses: maxim-lobanov/setup-xcode@v1
