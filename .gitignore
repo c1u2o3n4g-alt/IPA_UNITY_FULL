@@ -34,4 +34,7 @@ output/
 release/
 debug/
 my_builds/
-"xcode-assets.zip" 
+xcode-assets.zip
+
+# XCODE directory (large files now on GitHub Releases)
+XCODE/ 
