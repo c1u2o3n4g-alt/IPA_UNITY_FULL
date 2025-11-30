@@ -29,9 +29,13 @@ CHANGELOG.md
 requirements.txt
 set_token.ps1
 
+# Local environment variables (token riêng)
+.env
+
 # Output directories from auto_build_ipa.py
 output/
 release/
 debug/
 my_builds/
+"xcode-assets.zip" 
 "xcode-assets.zip" 
