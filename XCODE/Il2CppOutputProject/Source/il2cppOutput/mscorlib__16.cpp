@@ -29066,7 +29066,7 @@ IL_0010:
 		bool L_9 = ___2_serialization;
 		NullCheck(L_8);
 		String_t* L_10;
-		L_10 = VirtualFuncInvoker1< String_t*, bool >::Invoke(117, L_8, L_9);
+		L_10 = VirtualFuncInvoker1< String_t*, bool >::Invoke(125, L_8, L_9);
 		V_3 = L_10;
 		NullCheck(L_8);
 		bool L_11;
