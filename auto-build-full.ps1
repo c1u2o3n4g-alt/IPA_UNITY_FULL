@@ -4,7 +4,7 @@
 param(
     [string]$CommitMessage = "Auto build: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')",
     [string]$BuildConfig = "Release",
-    [string]$Branch = "main"
+    [string]$Branch = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -110,6 +110,12 @@ $REPO_OWNER = "c1u2o3n4g-alt"
 $REPO_NAME = "IPA_UNITY_FULL"
 $WORKFLOW_FILE = "build-ipa.yml"
 
+# Auto-detect branch if not specified
+if ([string]::IsNullOrWhiteSpace($Branch)) {
+    $Branch = (git branch --show-current).Trim()
+    Write-Info "Auto-detected branch: $Branch"
+}
+
 Write-Info "Repository: $REPO_OWNER/$REPO_NAME"
 Write-Info "Branch: $Branch"
 Write-Info "Build Config: $BuildConfig"
@@ -140,7 +146,16 @@ if ([string]::IsNullOrWhiteSpace($gitStatus)) {
     git commit -m $CommitMessage
     
     Write-Progress "Đang push lên GitHub..."
-    git push origin $Branch
+    
+    # Check if branch has upstream
+    $upstream = git rev-parse --abbrev-ref "$Branch@{upstream}" 2>$null
+    if (-not $upstream) {
+        Write-Info "Branch chưa có upstream, đang set upstream..."
+        git push --set-upstream origin $Branch
+    } else {
+        git push origin $Branch
+    }
+    
     Write-Success "Đã push code lên GitHub"
 }
 
