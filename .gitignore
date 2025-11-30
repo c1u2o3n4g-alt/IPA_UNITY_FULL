@@ -8,6 +8,19 @@
 *.xcworkspace/xcuserdata/
 *.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
 
+# EXCEPTION: KHÔNG IGNORE BẤT KỲ FILE NÀO TRONG XCODE/
+# Force include TẤT CẢ file trong XCODE folder
+!XCODE/**
+!XCODE/**/*
+!XCODE/**/*.xcarchive
+!XCODE/**/*.ipa
+!XCODE/**/.DS_Store
+!XCODE/**/*.tmp
+!XCODE/**/*.log
+!XCODE/**/xcuserdata/
+!XCODE/**/xcuserdata/**
+!XCODE/**/IDEWorkspaceChecks.plist
+
 # macOS
 .DS_Store
 
@@ -37,6 +50,7 @@ output/
 release/
 debug/
 my_builds/
+"xcode-assets.zip" 
 "xcode-assets.zip" 
 "xcode-assets.zip" 
 "xcode-assets.zip" 

@@ -36,6 +36,7 @@ struct Int16U5BU5DU5BU5D_t3B9E7F8B8A9ABE3DCB70EF6D806F55BF9267B25A;
 struct Int32U5BU5DU5BU5D_t179D865D5B30EFCBC50F82C9774329C15943466E;
 struct ItemU5BU5DU5BU5D_tE88D029D614193355E82E44DBBB6FE3FAFA719EC;
 struct StringU5BU5DU5BU5D_t8BCC500C5CC1686D9BADCBAA811074FE00F83ACF;
+struct BinhInfoU5BU5DU5BU5D_t0FEA82E7D99DCBF166E7CDE45D59CBD3DCA3FA4F;
 struct ArchivementU5BU5D_t69DF7421B65AEE8061C66DDEDDA6D92C3917BBF9;
 struct ArrowpaintU5BU5D_t1B9E234C843B54488E1DD019C34407B7505E345A;
 struct BooleanU5BU5D_tD317D27C31DB892BE79FAE3AEBC0B3FFB73DE9B4;
@@ -75,6 +76,8 @@ struct ThanhtuuU5BU5D_tF0BFADBE066A780A79D8FC0C374BBA64A06975E7;
 struct CellU5BU5D_t3272FB6142C61FEFBA0AE3134DA37303A07C89B3;
 struct MediaPlayerU5BU5D_t839F04327416E44370118ECE253352BB961C68DD;
 struct SoundPoolU5BU5D_tCE9E868307640AB9C2D463E0BE59D353D69DBDF7;
+struct BooleanU5BU2CU5D_t0A96EF7DC71D7FB5C1757A719712D1DFB2D571B6;
+struct StringU5BU2CU5D_tF2843FC5B60496ACCA54AD6538897DBA3E19A7EF;
 struct ArrayList_t7A8E5AF0C4378015B5731ABE2BED8F2782FEEF8A;
 struct Arrow_t460A8B3E92034B37943EE4E1748526CD114D2A52;
 struct AutoLogin_tDEB99DC54A9A2F7CAB57A97308F6410356DA9887;
@@ -191,6 +194,7 @@ IL2CPP_EXTERN_C RuntimeClass* Member_t06AA922C67FFC3AD6F3BF4D2EDAF9999B319B2CA_i
 IL2CPP_EXTERN_C RuntimeClass* ModFunc_tA6F0D7DB6A5926407FD10629866CDECEF483098C_il2cpp_TypeInfo_var;
 IL2CPP_EXTERN_C RuntimeClass* NotImplementedException_t6366FE4DCF15094C51F4833B91A2AE68D4DA90E8_il2cpp_TypeInfo_var;
 IL2CPP_EXTERN_C RuntimeClass* Panel_t804762F59781A709405735496EC5D5866038EE88_il2cpp_TypeInfo_var;
+IL2CPP_EXTERN_C RuntimeClass* PhongThiNghiemUI_t60BA97F98AE7426820DF5F513B619B89FE1825FB_il2cpp_TypeInfo_var;
 IL2CPP_EXTERN_C RuntimeClass* PopUp_t3BB90C30B5893C841BA556D8FF78CB3764542FE0_il2cpp_TypeInfo_var;
 IL2CPP_EXTERN_C RuntimeClass* Res_t38323F606354663ED4DCC348339DDE06239AB8C4_il2cpp_TypeInfo_var;
 IL2CPP_EXTERN_C RuntimeClass* Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857_il2cpp_TypeInfo_var;
@@ -205,6 +209,7 @@ IL2CPP_EXTERN_C RuntimeClass* TabSkillU5BU5D_t3C9A163EAB81A2057F552892E279601275
 IL2CPP_EXTERN_C RuntimeClass* TabSkill_t5EBDFC95B1F878CB20EA4CE1535E6DFBCB4E2310_il2cpp_TypeInfo_var;
 IL2CPP_EXTERN_C RuntimeClass* TabU5BU5D_t69191EE050E120A5A5DBDB25A8D6C343419DAE0B_il2cpp_TypeInfo_var;
 IL2CPP_EXTERN_C RuntimeClass* Tab_tB780FFA4E86AD678691C0AE5511812DB630FE6DB_il2cpp_TypeInfo_var;
+IL2CPP_EXTERN_C RuntimeClass* TaiXiuUI_t40B700FE3139AA39E96AD771ACFB9ED72835A659_il2cpp_TypeInfo_var;
 IL2CPP_EXTERN_C RuntimeClass* TextAsset_t2C64E93DA366D9DE5A8209E1802FA4884AC1BD69_il2cpp_TypeInfo_var;
 IL2CPP_EXTERN_C RuntimeClass* TextInfo_t32FA0888EDBFA94A6B7D06B8D83AED1A678B13A6_il2cpp_TypeInfo_var;
 IL2CPP_EXTERN_C RuntimeClass* TileMap_t6DE163606E09BE5EAFE2A46950C00BEC4E49DC77_il2cpp_TypeInfo_var;
@@ -1376,6 +1381,9 @@ struct PartImage_t64F0F30681AF0A1FFF6364500974AEA6E63CA2B5  : public RuntimeObje
 	int8_t ___dx;
 	int8_t ___dy;
 };
+struct PhongThiNghiemUI_t60BA97F98AE7426820DF5F513B619B89FE1825FB  : public RuntimeObject
+{
+};
 struct Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857  : public RuntimeObject
 {
 	int32_t ___cmtoX;
@@ -1560,6 +1568,9 @@ struct TabSkill_t5EBDFC95B1F878CB20EA4CE1535E6DFBCB4E2310  : public RuntimeObjec
 	int32_t ___x;
 	int32_t ___y;
 	bool ___isFocus;
+};
+struct TaiXiuUI_t40B700FE3139AA39E96AD771ACFB9ED72835A659  : public RuntimeObject
+{
 };
 struct TileMap_t6DE163606E09BE5EAFE2A46950C00BEC4E49DC77  : public RuntimeObject
 {
@@ -2570,6 +2581,84 @@ struct Panel_t804762F59781A709405735496EC5D5866038EE88_StaticFields
 	ImageU5BU5D_t01DF541495D8B058F2C04286B109C44731782BA6* ___effxanhnhat;
 	ImageU5BU5D_t01DF541495D8B058F2C04286B109C44731782BA6* ___effxanhdam;
 };
+struct PhongThiNghiemUI_t60BA97F98AE7426820DF5F513B619B89FE1825FB_StaticFields
+{
+	bool ___isShow;
+	int32_t ___soTab;
+	int32_t ___X;
+	int32_t ___Y;
+	int32_t ___W;
+	int32_t ___H;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgBackground;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgNenPtn;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgNenInfo;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgClose;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgTab0;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgTab1;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgThanhDe;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgBinhRong;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgThem;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgChon;
+	ImageU5BU5D_t01DF541495D8B058F2C04286B109C44731782BA6* ___imgBinh;
+	bool ___isTabPressed;
+	bool ___isDropdownShow;
+	int32_t ___currentTabIndex;
+	StringU5BU5D_t7674CD946EC0CE7B3AE0BE70E6EE85F2ECD9F248* ___tabStrings;
+	int32_t ___dropdownX;
+	int32_t ___dropdownY;
+	int32_t ___dropdownW;
+	int32_t ___dropdownH;
+	int32_t ___soBinhHienCo;
+	int32_t ___themX;
+	int32_t ___themY;
+	Int32U5BU5D_t19C97395396A72ECAF310612F0760F165060314C* ___soBinhTheoTab;
+	Int32U5BU5D_t19C97395396A72ECAF310612F0760F165060314C* ___maxBinhTheoTab;
+	Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* ___binhScroll;
+	Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* ___infoScroll;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgScrollBar;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgScrollThumb;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgNutDieuChe0;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgNutDieuChe1;
+	bool ___isNutDieuChePressed;
+	int32_t ___scrollBarX;
+	int32_t ___scrollBarY;
+	int32_t ___scrollBarWidth;
+	int32_t ___scrollBarHeight;
+	StringU5BU2CU5D_tF2843FC5B60496ACCA54AD6538897DBA3E19A7EF* ___craftingTimeLeft;
+	BooleanU5BU2CU5D_t0A96EF7DC71D7FB5C1757A719712D1DFB2D571B6* ___isCrafting;
+	BooleanU5BU2CU5D_t0A96EF7DC71D7FB5C1757A719712D1DFB2D571B6* ___isWaitingReward;
+	int64_t ___lastUpdateTime;
+	int64_t ___updateInterval;
+	int64_t ___lastFlipTime;
+	int64_t ___flipInterval;
+	BooleanU5BU2CU5D_t0A96EF7DC71D7FB5C1757A719712D1DFB2D571B6* ___isFlipped;
+	int32_t ___scrollThumbX;
+	int32_t ___scrollThumbY;
+	int32_t ___scrollThumbWidth;
+	int32_t ___scrollThumbHeight;
+	bool ___isScrollBarVisible;
+	bool ___isDraggingThumb;
+	int32_t ___dragStartY;
+	int32_t ___dragStartScrollY;
+	int32_t ___lastScrollY;
+	int64_t ___dragEndTime;
+	bool ___isScrollProtected;
+	bool ___hasScrollInteraction;
+	int64_t ___lastInteractionTime;
+	int32_t ___cachedScrollAreaX;
+	int32_t ___cachedScrollAreaY;
+	int32_t ___cachedScrollAreaWidth;
+	int32_t ___cachedScrollAreaHeight;
+	int32_t ___cachedClickableWidth;
+	int32_t ___cachedThanhDeX;
+	int32_t ___cachedThanhDeStartY;
+	int32_t ___cachedThanhDeSpacing;
+	int32_t ___cachedBinhRongStartX;
+	int32_t ___cachedBinhRongSpacing;
+	bool ___cacheNeedsUpdate;
+	int32_t ___selectedBinhIndex;
+	BinhInfoU5BU5DU5BU5D_t0FEA82E7D99DCBF166E7CDE45D59CBD3DCA3FA4F* ___tabBinhInfo;
+};
 struct Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857_StaticFields
 {
 	Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* ___gI;
@@ -2706,6 +2795,116 @@ struct TField_tD4DF29EFE0231C8E635EC9D3B80EE02B8422B062_StaticFields
 struct TabClanIcon_t47534D490FC51A1383796377AF7A67B3153C9D42_StaticFields
 {
 	Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* ___scrMain;
+};
+struct TaiXiuUI_t40B700FE3139AA39E96AD771ACFB9ED72835A659_StaticFields
+{
+	bool ___isShow;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___background;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgClose;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___showchatbtn;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___showchatbtnf;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___bat_off;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___bat_on;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___batImage;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___nutdatcuoc0;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___nutdatcuoc1;
+	int32_t ___countdownTime;
+	int32_t ___taiPlayerCount;
+	int32_t ___xiuPlayerCount;
+	int32_t ___diceX;
+	int32_t ___diceY;
+	int32_t ___diceZ;
+	bool ___showDiceResult;
+	bool ___isshowEffectNRO;
+	int32_t ___sessionCounter;
+	int64_t ___totalBetTai;
+	int64_t ___totalBetXiu;
+	int64_t ___myBetTai;
+	int64_t ___myBetXiu;
+	int64_t ___myTotalMoney;
+	ImageU5BU5D_t01DF541495D8B058F2C04286B109C44731782BA6* ___numberImages;
+	ImageU5BU5D_t01DF541495D8B058F2C04286B109C44731782BA6* ___timeoutNumberImages;
+	ImageU5BU5D_t01DF541495D8B058F2C04286B109C44731782BA6* ___diceImages;
+	MyVector_t1BD8213FA9BC417210FACEAA3F24BE9229D47AFA* ___chatMessages;
+	Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* ___chatScroll;
+	int32_t ___X;
+	int32_t ___Y;
+	int32_t ___W;
+	int32_t ___H;
+	int32_t ___XMid;
+	int32_t ___YMid;
+	int32_t ___space;
+	int32_t ____closeButtonX;
+	int32_t ____closeButtonY;
+	int32_t ____chatButtonX;
+	int32_t ____chatButtonY;
+	int32_t ____batX;
+	int32_t ____batY;
+	int32_t ____leftCharX;
+	int32_t ____rightCharX;
+	int32_t ____leftMoneyX;
+	int32_t ____rightMoneyX;
+	int32_t ____leftBetButtonX;
+	int32_t ____leftBetButtonY;
+	int32_t ____rightBetButtonX;
+	int32_t ____rightBetButtonY;
+	Char_tEF02D1F86AD92A794E1615A2AAF94B8B70609009* ___leftPlayer;
+	Char_tEF02D1F86AD92A794E1615A2AAF94B8B70609009* ___rightPlayer;
+	int32_t ___animationTick;
+	int32_t ___animationFrame;
+	FrameImage_tCFEF62A81BB472D70C9A0864355BD2B26F3F9EF0* ___WinEffect;
+	FrameImage_tCFEF62A81BB472D70C9A0864355BD2B26F3F9EF0* ___LoseEffect;
+	FrameImage_tCFEF62A81BB472D70C9A0864355BD2B26F3F9EF0* ___TamhoaEffect;
+	Int32U5BU5D_t19C97395396A72ECAF310612F0760F165060314C* ___BETINDEX;
+	bool ___showBettingPanel;
+	int64_t ___cuoctamthoi;
+	int32_t ___selectedBetType;
+	String_t* ___historyResults;
+	bool ___batCoverMode;
+	int32_t ___batX;
+	int32_t ___batY;
+	bool ___isDraggingBat;
+	int32_t ___batSize;
+	bool ___hasShownEffect;
+	bool ___hasUpdatedHistory;
+	bool ___showChatInput;
+	ChatTextField_t8F2C7F4127297584534CC5C60297A27929E3EB15* ___chatInputField;
+	bool ___isAtBottom;
+	bool ___showChatInputDialog;
+	ChatTextField_t8F2C7F4127297584534CC5C60297A27929E3EB15* ___chatInputDialog;
+	int32_t ___chatDialogX;
+	int32_t ___chatDialogY;
+	int32_t ___chatDialogW;
+	int32_t ___chatDialogH;
+	int32_t ___chatInputButtonX;
+	int32_t ___chatInputButtonY;
+	int32_t ___chatInputButtonW;
+	int32_t ___chatInputButtonH;
+	int32_t ___flyTextStartTick;
+	bool ___showFlyText;
+	String_t* ___flyTextContent;
+	int32_t ___flyTextX;
+	int32_t ___flyTextY;
+	mFont_t97EDD9503592D93D7C6CE1E8FD54D0DBB403A1CE* ___flyTextFont;
+	int32_t ___sendButtonX;
+	int32_t ___sendButtonY;
+	int32_t ___sendButtonW;
+	int32_t ___sendButtonH;
+	int32_t ___scrollUpButtonX;
+	int32_t ___scrollUpButtonY;
+	int32_t ___scrollUpButtonW;
+	int32_t ___scrollUpButtonH;
+	int32_t ___scrollDownButtonX;
+	int32_t ___scrollDownButtonY;
+	int32_t ___scrollDownButtonW;
+	int32_t ___scrollDownButtonH;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgScrollUp;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgScrollDown;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgScrollUpPressed;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgScrollDownPressed;
+	bool ___isScrollUpPressed;
+	bool ___isScrollDownPressed;
+	int16_t ___moneyIconId;
 };
 struct TileMap_t6DE163606E09BE5EAFE2A46950C00BEC4E49DC77_StaticFields
 {
@@ -3398,6 +3597,10 @@ struct GameScr_t63B7FC1D1B33A72EE9EDC5FE114151D4CE691653_StaticFields
 	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgChat2;
 	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgTambao;
 	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgTambao2;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgTaixiu;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgTaixiu2;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgMiniGame;
+	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgMiniGame2;
 	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgMenu;
 	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgFocus;
 	Image_t465F017E2CF22CFD1E63179753DEC9B48222C6E6* ___imgFocus2;
@@ -6108,6 +6311,8 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void Bag_updateKey_mFFC43F3A144C79C9EDC3770C1
 	if (!s_Il2CppMethodInitialized)
 	{
 		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&Char_tEF02D1F86AD92A794E1615A2AAF94B8B70609009_il2cpp_TypeInfo_var);
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&PhongThiNghiemUI_t60BA97F98AE7426820DF5F513B619B89FE1825FB_il2cpp_TypeInfo_var);
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&TaiXiuUI_t40B700FE3139AA39E96AD771ACFB9ED72835A659_il2cpp_TypeInfo_var);
 		s_Il2CppMethodInitialized = true;
 	}
 	{
@@ -6123,242 +6328,265 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void Bag_updateKey_mFFC43F3A144C79C9EDC3770C1
 
 IL_0009:
 	{
-		int32_t L_1 = __this->___currTab;
-		int32_t L_2 = __this->___BANG_HOI;
-		if ((((int32_t)L_1) == ((int32_t)L_2)))
+		il2cpp_codegen_runtime_class_init_inline(TaiXiuUI_t40B700FE3139AA39E96AD771ACFB9ED72835A659_il2cpp_TypeInfo_var);
+		bool L_1 = ((TaiXiuUI_t40B700FE3139AA39E96AD771ACFB9ED72835A659_StaticFields*)il2cpp_codegen_static_fields_for(TaiXiuUI_t40B700FE3139AA39E96AD771ACFB9ED72835A659_il2cpp_TypeInfo_var))->___isShow;
+		if (L_1)
 		{
-			goto IL_0085;
+			goto IL_0017;
 		}
 	}
 	{
-		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_3 = __this->___scrollBag;
-		if (!L_3)
+		il2cpp_codegen_runtime_class_init_inline(PhongThiNghiemUI_t60BA97F98AE7426820DF5F513B619B89FE1825FB_il2cpp_TypeInfo_var);
+		bool L_2 = ((PhongThiNghiemUI_t60BA97F98AE7426820DF5F513B619B89FE1825FB_StaticFields*)il2cpp_codegen_static_fields_for(PhongThiNghiemUI_t60BA97F98AE7426820DF5F513B619B89FE1825FB_il2cpp_TypeInfo_var))->___isShow;
+		if (!L_2)
 		{
-			goto IL_0041;
+			goto IL_0018;
 		}
-	}
-	{
-		int32_t L_4 = __this->___currTab;
-		int32_t L_5 = __this->___BANG_HOI;
-		if ((((int32_t)L_4) == ((int32_t)L_5)))
-		{
-			goto IL_0041;
-		}
-	}
-	{
-		bool L_6 = __this->___isItemInfo;
-		if (L_6)
-		{
-			goto IL_0041;
-		}
-	}
-	{
-		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_7 = __this->___scrollBag;
-		NullCheck(L_7);
-		ScrollResult_t64E79D9245F0A1A37AAE1909F0914D218200729F* L_8;
-		L_8 = Scroll_updateKey_mC655F7DD4E332D1EFA26C362CF84174F916BA518(L_7, NULL);
 	}
 
-IL_0041:
+IL_0017:
 	{
-		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_9 = __this->___scrollNoitai;
-		if (!L_9)
-		{
-			goto IL_0055;
-		}
-	}
-	{
-		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_10 = __this->___scrollNoitai;
-		NullCheck(L_10);
-		ScrollResult_t64E79D9245F0A1A37AAE1909F0914D218200729F* L_11;
-		L_11 = Scroll_updateKey_mC655F7DD4E332D1EFA26C362CF84174F916BA518(L_10, NULL);
+		return;
 	}
 
-IL_0055:
+IL_0018:
 	{
-		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_12 = __this->___scrollInfo;
-		if (!L_12)
+		int32_t L_3 = __this->___currTab;
+		int32_t L_4 = __this->___BANG_HOI;
+		if ((((int32_t)L_3) == ((int32_t)L_4)))
 		{
-			goto IL_0069;
+			goto IL_0094;
 		}
 	}
 	{
-		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_13 = __this->___scrollInfo;
-		NullCheck(L_13);
-		ScrollResult_t64E79D9245F0A1A37AAE1909F0914D218200729F* L_14;
-		L_14 = Scroll_updateKey_mC655F7DD4E332D1EFA26C362CF84174F916BA518(L_13, NULL);
+		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_5 = __this->___scrollBag;
+		if (!L_5)
+		{
+			goto IL_0050;
+		}
+	}
+	{
+		int32_t L_6 = __this->___currTab;
+		int32_t L_7 = __this->___BANG_HOI;
+		if ((((int32_t)L_6) == ((int32_t)L_7)))
+		{
+			goto IL_0050;
+		}
+	}
+	{
+		bool L_8 = __this->___isItemInfo;
+		if (L_8)
+		{
+			goto IL_0050;
+		}
+	}
+	{
+		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_9 = __this->___scrollBag;
+		NullCheck(L_9);
+		ScrollResult_t64E79D9245F0A1A37AAE1909F0914D218200729F* L_10;
+		L_10 = Scroll_updateKey_mC655F7DD4E332D1EFA26C362CF84174F916BA518(L_9, NULL);
 	}
 
-IL_0069:
+IL_0050:
 	{
-		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_15 = __this->___scrollInfoSkill;
-		if (!L_15)
+		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_11 = __this->___scrollNoitai;
+		if (!L_11)
 		{
-			goto IL_012c;
+			goto IL_0064;
 		}
 	}
 	{
-		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_16 = __this->___scrollInfoSkill;
-		NullCheck(L_16);
-		ScrollResult_t64E79D9245F0A1A37AAE1909F0914D218200729F* L_17;
-		L_17 = Scroll_updateKey_mC655F7DD4E332D1EFA26C362CF84174F916BA518(L_16, NULL);
-		goto IL_012c;
+		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_12 = __this->___scrollNoitai;
+		NullCheck(L_12);
+		ScrollResult_t64E79D9245F0A1A37AAE1909F0914D218200729F* L_13;
+		L_13 = Scroll_updateKey_mC655F7DD4E332D1EFA26C362CF84174F916BA518(L_12, NULL);
 	}
 
-IL_0085:
+IL_0064:
 	{
-		TabClanIcon_t47534D490FC51A1383796377AF7A67B3153C9D42* L_18 = __this->___tabIcon;
-		if (!L_18)
+		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_14 = __this->___scrollInfo;
+		if (!L_14)
 		{
-			goto IL_00aa;
+			goto IL_0078;
 		}
 	}
 	{
-		TabClanIcon_t47534D490FC51A1383796377AF7A67B3153C9D42* L_19 = __this->___tabIcon;
-		NullCheck(L_19);
-		bool L_20 = L_19->___isShow;
+		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_15 = __this->___scrollInfo;
+		NullCheck(L_15);
+		ScrollResult_t64E79D9245F0A1A37AAE1909F0914D218200729F* L_16;
+		L_16 = Scroll_updateKey_mC655F7DD4E332D1EFA26C362CF84174F916BA518(L_15, NULL);
+	}
+
+IL_0078:
+	{
+		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_17 = __this->___scrollInfoSkill;
+		if (!L_17)
+		{
+			goto IL_013b;
+		}
+	}
+	{
+		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_18 = __this->___scrollInfoSkill;
+		NullCheck(L_18);
+		ScrollResult_t64E79D9245F0A1A37AAE1909F0914D218200729F* L_19;
+		L_19 = Scroll_updateKey_mC655F7DD4E332D1EFA26C362CF84174F916BA518(L_18, NULL);
+		goto IL_013b;
+	}
+
+IL_0094:
+	{
+		TabClanIcon_t47534D490FC51A1383796377AF7A67B3153C9D42* L_20 = __this->___tabIcon;
 		if (!L_20)
 		{
-			goto IL_00aa;
+			goto IL_00b9;
 		}
 	}
 	{
 		TabClanIcon_t47534D490FC51A1383796377AF7A67B3153C9D42* L_21 = __this->___tabIcon;
 		NullCheck(L_21);
-		TabClanIcon_updateKey_m7413E53F9A5B5B1265144C147D48BE2B2A120D62(L_21, NULL);
-		goto IL_012c;
-	}
-
-IL_00aa:
-	{
-		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_22 = __this->___scrollMemClan;
+		bool L_22 = L_21->___isShow;
 		if (!L_22)
 		{
-			goto IL_00ce;
+			goto IL_00b9;
 		}
 	}
 	{
-		bool L_23 = __this->___isShowMemClan;
-		if (!L_23)
-		{
-			goto IL_00ce;
-		}
-	}
-	{
-		bool L_24 = __this->___isShowInfomem;
-		if (L_24)
-		{
-			goto IL_00ce;
-		}
-	}
-	{
-		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_25 = __this->___scrollMemClan;
-		NullCheck(L_25);
-		ScrollResult_t64E79D9245F0A1A37AAE1909F0914D218200729F* L_26;
-		L_26 = Scroll_updateKey_mC655F7DD4E332D1EFA26C362CF84174F916BA518(L_25, NULL);
+		TabClanIcon_t47534D490FC51A1383796377AF7A67B3153C9D42* L_23 = __this->___tabIcon;
+		NullCheck(L_23);
+		TabClanIcon_updateKey_m7413E53F9A5B5B1265144C147D48BE2B2A120D62(L_23, NULL);
+		goto IL_013b;
 	}
 
-IL_00ce:
+IL_00b9:
 	{
-		int32_t L_27 = __this->___currTab;
-		int32_t L_28 = __this->___BANG_HOI;
-		if ((!(((uint32_t)L_27) == ((uint32_t)L_28))))
+		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_24 = __this->___scrollMemClan;
+		if (!L_24)
 		{
-			goto IL_00f4;
+			goto IL_00dd;
+		}
+	}
+	{
+		bool L_25 = __this->___isShowMemClan;
+		if (!L_25)
+		{
+			goto IL_00dd;
+		}
+	}
+	{
+		bool L_26 = __this->___isShowInfomem;
+		if (L_26)
+		{
+			goto IL_00dd;
+		}
+	}
+	{
+		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_27 = __this->___scrollMemClan;
+		NullCheck(L_27);
+		ScrollResult_t64E79D9245F0A1A37AAE1909F0914D218200729F* L_28;
+		L_28 = Scroll_updateKey_mC655F7DD4E332D1EFA26C362CF84174F916BA518(L_27, NULL);
+	}
+
+IL_00dd:
+	{
+		int32_t L_29 = __this->___currTab;
+		int32_t L_30 = __this->___BANG_HOI;
+		if ((!(((uint32_t)L_29) == ((uint32_t)L_30))))
+		{
+			goto IL_0103;
 		}
 	}
 	{
 		il2cpp_codegen_runtime_class_init_inline(Char_tEF02D1F86AD92A794E1615A2AAF94B8B70609009_il2cpp_TypeInfo_var);
-		Char_tEF02D1F86AD92A794E1615A2AAF94B8B70609009* L_29;
-		L_29 = Char_myCharz_m3A10DAB1569325FF72C216D48F44E2F24BC229FB(NULL);
-		NullCheck(L_29);
-		Clan_t62307BEA98E8848B1BC412886EA3EC502C86FA88* L_30 = L_29->___clan;
-		if (L_30)
+		Char_tEF02D1F86AD92A794E1615A2AAF94B8B70609009* L_31;
+		L_31 = Char_myCharz_m3A10DAB1569325FF72C216D48F44E2F24BC229FB(NULL);
+		NullCheck(L_31);
+		Clan_t62307BEA98E8848B1BC412886EA3EC502C86FA88* L_32 = L_31->___clan;
+		if (L_32)
 		{
-			goto IL_00f4;
+			goto IL_0103;
 		}
 	}
 	{
-		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_31 = __this->___scrollClans;
-		NullCheck(L_31);
-		ScrollResult_t64E79D9245F0A1A37AAE1909F0914D218200729F* L_32;
-		L_32 = Scroll_updateKey_mC655F7DD4E332D1EFA26C362CF84174F916BA518(L_31, NULL);
+		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_33 = __this->___scrollClans;
+		NullCheck(L_33);
+		ScrollResult_t64E79D9245F0A1A37AAE1909F0914D218200729F* L_34;
+		L_34 = Scroll_updateKey_mC655F7DD4E332D1EFA26C362CF84174F916BA518(L_33, NULL);
 	}
 
-IL_00f4:
-	{
-		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_33 = __this->___scrollChatClan;
-		if (!L_33)
-		{
-			goto IL_0110;
-		}
-	}
-	{
-		bool L_34 = __this->___isShowchatClan;
-		if (!L_34)
-		{
-			goto IL_0110;
-		}
-	}
+IL_0103:
 	{
 		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_35 = __this->___scrollChatClan;
-		NullCheck(L_35);
-		ScrollResult_t64E79D9245F0A1A37AAE1909F0914D218200729F* L_36;
-		L_36 = Scroll_updateKey_mC655F7DD4E332D1EFA26C362CF84174F916BA518(L_35, NULL);
+		if (!L_35)
+		{
+			goto IL_011f;
+		}
+	}
+	{
+		bool L_36 = __this->___isShowchatClan;
+		if (!L_36)
+		{
+			goto IL_011f;
+		}
+	}
+	{
+		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_37 = __this->___scrollChatClan;
+		NullCheck(L_37);
+		ScrollResult_t64E79D9245F0A1A37AAE1909F0914D218200729F* L_38;
+		L_38 = Scroll_updateKey_mC655F7DD4E332D1EFA26C362CF84174F916BA518(L_37, NULL);
 	}
 
-IL_0110:
-	{
-		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_37 = __this->___scrollSticker;
-		if (!L_37)
-		{
-			goto IL_012c;
-		}
-	}
-	{
-		bool L_38 = __this->___isPaintStickers;
-		if (!L_38)
-		{
-			goto IL_012c;
-		}
-	}
+IL_011f:
 	{
 		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_39 = __this->___scrollSticker;
-		NullCheck(L_39);
-		ScrollResult_t64E79D9245F0A1A37AAE1909F0914D218200729F* L_40;
-		L_40 = Scroll_updateKey_mC655F7DD4E332D1EFA26C362CF84174F916BA518(L_39, NULL);
+		if (!L_39)
+		{
+			goto IL_013b;
+		}
+	}
+	{
+		bool L_40 = __this->___isPaintStickers;
+		if (!L_40)
+		{
+			goto IL_013b;
+		}
+	}
+	{
+		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_41 = __this->___scrollSticker;
+		NullCheck(L_41);
+		ScrollResult_t64E79D9245F0A1A37AAE1909F0914D218200729F* L_42;
+		L_42 = Scroll_updateKey_mC655F7DD4E332D1EFA26C362CF84174F916BA518(L_41, NULL);
 	}
 
-IL_012c:
+IL_013b:
 	{
-		Clan_t62307BEA98E8848B1BC412886EA3EC502C86FA88* L_41 = __this->___currclan;
-		if (!L_41)
+		Clan_t62307BEA98E8848B1BC412886EA3EC502C86FA88* L_43 = __this->___currclan;
+		if (!L_43)
 		{
-			goto IL_0150;
+			goto IL_015f;
 		}
 	}
 	{
-		bool L_42 = __this->___isShowMemClan;
-		if (!L_42)
+		bool L_44 = __this->___isShowMemClan;
+		if (!L_44)
 		{
-			goto IL_0150;
+			goto IL_015f;
 		}
 	}
 	{
-		Member_t06AA922C67FFC3AD6F3BF4D2EDAF9999B319B2CA* L_43 = __this->___currmember;
-		if (L_43)
+		Member_t06AA922C67FFC3AD6F3BF4D2EDAF9999B319B2CA* L_45 = __this->___currmember;
+		if (L_45)
 		{
-			goto IL_0150;
+			goto IL_015f;
 		}
 	}
 	{
-		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_44 = __this->___scrollMemClan;
-		NullCheck(L_44);
-		ScrollResult_t64E79D9245F0A1A37AAE1909F0914D218200729F* L_45;
-		L_45 = Scroll_updateKey_mC655F7DD4E332D1EFA26C362CF84174F916BA518(L_44, NULL);
+		Scroll_t7F058A071594F26BAD6B9404C5D47FD1447E8857* L_46 = __this->___scrollMemClan;
+		NullCheck(L_46);
+		ScrollResult_t64E79D9245F0A1A37AAE1909F0914D218200729F* L_47;
+		L_47 = Scroll_updateKey_mC655F7DD4E332D1EFA26C362CF84174F916BA518(L_46, NULL);
 	}
 
-IL_0150:
+IL_015f:
 	{
 		return;
 	}
