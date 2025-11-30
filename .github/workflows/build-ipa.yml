@@ -23,7 +23,7 @@ jobs:
         lfs: true
         fetch-depth: 1
     
-        - name: Git LFS Pull
+    - name: Git LFS Pull
       run: |
         echo "=== Fetching Git LFS files ==="
         git lfs fetch --all
