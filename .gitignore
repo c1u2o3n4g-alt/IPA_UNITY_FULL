@@ -50,7 +50,6 @@ output/
 release/
 debug/
 my_builds/
-"xcode-assets.zip" 
-"xcode-assets.zip" 
-"xcode-assets.zip" 
-"xcode-assets.zip" 
+
+# xcode-assets.zip (KHÔNG CẦN NỮA - dùng Git LFS)
+xcode-assets.zip 

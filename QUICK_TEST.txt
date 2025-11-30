@@ -1,0 +1,78 @@
+╔══════════════════════════════════════════════════════════╗
+║           🚀 QUICK TEST AUTO BUILD TOOL 🚀              ║
+╚══════════════════════════════════════════════════════════╝
+
+📋 TRƯỚC KHI CHẠY TOOL LẦN ĐẦU
+
+1. Setup GitHub Token local (chỉ 1 lần)
+   
+   .\set-token-local.ps1
+   
+   Nhập token mới khi được hỏi
+
+2. Verify token đã được lưu
+   
+   Test-Path .env
+   → Phải trả về: True
+
+═══════════════════════════════════════════════════════════
+
+⚡ CHẠY AUTO BUILD TOOL
+
+Cách 1: File .bat (Khuyến nghị)
+   
+   auto-build-full.bat
+
+Cách 2: PowerShell
+   
+   .\auto-build-full.ps1
+
+Cách 3: PowerShell với custom message
+   
+   .\auto-build-full.ps1 -CommitMessage "Test build"
+
+═══════════════════════════════════════════════════════════
+
+📊 TOOL SẼ HIỂN THỊ
+
+✅ BƯỚC 1: Load GitHub Token
+✅ BƯỚC 2: Push code lên GitHub  
+✅ BƯỚC 3: Trigger workflow
+✅ BƯỚC 4: Theo dõi tiến trình (20-30 phút)
+   - 🔄 Status: in_progress
+   - 🔨 Current step: Build and Archive - 45%
+   - ⏱️  Elapsed time: 12.5 phút
+✅ BƯỚC 5: Download IPA tự động
+
+═══════════════════════════════════════════════════════════
+
+📁 OUTPUT
+
+File IPA sẽ được lưu tại:
+   .\output\NROFLY.ipa
+
+Tool sẽ tự động mở thư mục output khi hoàn tất
+
+═══════════════════════════════════════════════════════════
+
+💡 TIPS
+
+- Bạn có thể làm việc khác trong khi tool chạy
+- Progress được cập nhật mỗi 15 giây
+- Nếu muốn cancel: Ctrl+C
+
+═══════════════════════════════════════════════════════════
+
+🐛 NẾU GẶP LỖI
+
+"Không tìm thấy GitHub Token"
+   → Chạy: .\set-token-local.ps1
+
+"Không thể trigger workflow"  
+   → Kiểm tra token permissions trong ảnh bạn đã gửi
+   → Token cần: Actions + Contents permissions
+
+"Build thất bại"
+   → Xem log tại URL được hiển thị trong console
+
+═══════════════════════════════════════════════════════════
