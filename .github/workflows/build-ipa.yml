@@ -17,99 +17,27 @@ jobs:
     runs-on: macos-latest
     
     steps:
-    - name: Checkout repository (without Git LFS)
+    - name: Checkout repository (with Git LFS)
       uses: actions/checkout@v4
       with:
-        lfs: false
+        lfs: true
         fetch-depth: 1
     
-    - name: Download XCODE assets from GitHub Release
+        - name: Git LFS Pull
       run: |
-        set -x  # Enable debug mode
-        RELEASE_TAG="v1.0-latest"
-        ASSET_NAME="xcode-assets.zip"
-        REPO="${{ github.repository }}"
-        
-        echo "=== Starting download process ==="
-        echo "Release Tag: ${RELEASE_TAG}"
-        echo "Asset Name: ${ASSET_NAME}"
-        echo "Repository: ${REPO}"
-        echo "Current directory: $(pwd)"
-        echo "Current directory contents:"
-        ls -la
+        echo "=== Fetching Git LFS files ==="
+        git lfs fetch --all
+        git lfs checkout
         
         echo ""
-        echo "=== Fetching release information ==="
-        RELEASE_JSON=$(curl -s -H "Authorization: token ${{ github.token }}" \
-          "https://api.github.com/repos/${REPO}/releases/tags/${RELEASE_TAG}")
-        
-        echo "Release API response (first 500 chars):"
-        echo "$RELEASE_JSON" | head -c 500
-        
-        # Get download URL
-        DOWNLOAD_URL=$(echo "$RELEASE_JSON" | grep "browser_download_url.*${ASSET_NAME}" | cut -d '"' -f 4)
-        
-        if [ -z "$DOWNLOAD_URL" ]; then
-          echo ""
-          echo "ERROR: Could not find ${ASSET_NAME} in Release ${RELEASE_TAG}"
-          echo ""
-          echo "Available assets in this release:"
-          echo "$RELEASE_JSON" | grep "browser_download_url" | cut -d '"' -f 4
-          echo ""
-          echo "All releases in repository:"
-          curl -s -H "Authorization: token ${{ github.token }}" \
-            "https://api.github.com/repos/${REPO}/releases" | \
-            grep -E '"tag_name"|"name"' | head -20
-          exit 1
-        fi
-        
-        echo ""
-        echo "=== Downloading file ==="
-        echo "Download URL: ${DOWNLOAD_URL}"
-        
-        curl -L -H "Authorization: token ${{ github.token }}" \
-          -H "Accept: application/octet-stream" \
-          -o "${ASSET_NAME}" \
-          --progress-bar \
-          "${DOWNLOAD_URL}"
-        
-        echo ""
-        echo "=== Verifying download ==="
-        if [ ! -f "${ASSET_NAME}" ]; then
-          echo "ERROR: File ${ASSET_NAME} not found after download"
-          echo "Current directory contents:"
+        echo "=== Verifying XCODE directory ==="
+        if [ ! -d "XCODE" ]; then
+          echo "ERROR: XCODE directory not found"
           ls -la
           exit 1
         fi
         
-        FILE_SIZE=$(stat -f%z "${ASSET_NAME}" 2>/dev/null || stat -c%s "${ASSET_NAME}")
-        echo "Downloaded ${ASSET_NAME}: ${FILE_SIZE} bytes ($(echo "scale=2; ${FILE_SIZE}/1024/1024" | bc) MB)"
-        
-        echo ""
-        echo "=== Extracting archive ==="
-        unzip -l "${ASSET_NAME}" | head -20
-        echo "..."
-        
-        unzip -q "${ASSET_NAME}"
-        UNZIP_EXIT=$?
-        
-        if [ $UNZIP_EXIT -ne 0 ]; then
-          echo "ERROR: unzip failed with exit code $UNZIP_EXIT"
-          exit 1
-        fi
-        
-        echo ""
-        echo "=== Verifying extraction ==="
-        echo "Current directory after extraction:"
-        ls -la
-        
-        if [ ! -d "XCODE" ]; then
-          echo "ERROR: XCODE directory not found after extraction"
-          exit 1
-        fi
-        
-        echo ""
-        echo "=== XCODE directory contents ==="
+        echo "XCODE directory found"
         ls -lh XCODE/ | head -20
         
         echo ""
@@ -121,11 +49,7 @@ jobs:
           exit 1
         fi
         
-        echo "SUCCESS: All files extracted correctly"
-        
-        # Clean up
-        rm "${ASSET_NAME}"
-        echo "Cleanup complete"
+        echo "SUCCESS: All files available from Git LFS"
       
     - name: Setup Xcode
       uses: maxim-lobanov/setup-xcode@v1
