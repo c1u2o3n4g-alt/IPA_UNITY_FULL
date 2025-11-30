@@ -1,0 +1,74 @@
+╔══════════════════════════════════════════════════════════╗
+║  HƯỚNG DẪN BUILD IPA NHANH - SỬ DỤNG GIT LFS           ║
+╚══════════════════════════════════════════════════════════╝
+
+🚀 CÁCH BUILD (TỰ ĐỘNG 100%)
+
+⚡ MỚI: AUTO BUILD TOOL - 1 LỆNH DUY NHẤT!
+   
+   auto-build-full.bat
+   
+   Tool sẽ tự động:
+   ✅ Push code lên GitHub
+   ✅ Trigger workflow
+   ✅ Theo dõi tiến trình real-time
+   ✅ Download IPA khi xong
+   ✅ Hiển thị progress chi tiết
+   
+   → Xem hướng dẫn: HUONG_DAN_AUTO_BUILD.md
+
+═══════════════════════════════════════════════════════════
+
+🛠️ CÁCH BUILD MANUAL (3 BƯỚC)
+
+1️⃣  PUSH CODE LÊN GITHUB
+   git add .
+   git commit -m "Update code"
+   git push
+
+2️⃣  VÀO GITHUB ACTIONS
+   - Mở: https://github.com/c1u2o3n4g-alt/IPA_UNITY_FULL
+   - Click tab "Actions"
+   - Click workflow "Build iOS IPA"
+   - Click nút "Run workflow" (màu xanh)
+   - Chọn "Release" hoặc "Debug"
+   - Click "Run workflow"
+
+3️⃣  ĐỢI VÀ DOWNLOAD
+   - Đợi 20-30 phút
+   - Download file "NROFLY.ipa" từ Artifacts
+
+═══════════════════════════════════════════════════════════
+
+⚠️  LƯU Ý QUAN TRỌNG
+
+❌ KHÔNG dùng "python auto_build_ipa.py" nữa
+❌ KHÔNG cần tạo xcode-assets.zip
+✅ Chỉ cần GIT PUSH và chạy workflow
+
+═══════════════════════════════════════════════════════════
+
+📚 XEM HƯỚNG DẪN CHI TIẾT
+
+File: HUONG_DAN_BUILD_GIT_LFS.md
+
+═══════════════════════════════════════════════════════════
+
+💡 TẠI SAO CHUYỂN SANG GIT LFS?
+
+✅ Đơn giản hơn - không cần script Python
+✅ Ổn định hơn - không thiếu file
+✅ Tự động hơn - Git tự quản lý file lớn
+✅ Build thành công cao hơn
+
+═══════════════════════════════════════════════════════════
+
+🔧 KIỂM TRA GIT LFS
+
+Xem file đang được quản lý:
+   git lfs ls-files
+
+Pull tất cả file lớn:
+   git lfs pull
+
+═══════════════════════════════════════════════════════════
