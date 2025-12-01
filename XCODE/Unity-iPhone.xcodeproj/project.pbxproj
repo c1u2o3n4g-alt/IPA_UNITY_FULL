@@ -156,7 +156,6 @@
 /* Begin PBXFileReference section */
 		0084A6F53FDC53D8C88D04BC /* mscorlib__14.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mscorlib__14.cpp; path = Il2CppOutputProject/Source/il2cppOutput/mscorlib__14.cpp; sourceTree = SOURCE_ROOT; };
 		01542E4A7351BF537D5F9A2D /* UnityEngine.TextCoreTextEngineModule.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = UnityEngine.TextCoreTextEngineModule.cpp; path = Il2CppOutputProject/Source/il2cppOutput/UnityEngine.TextCoreTextEngineModule.cpp; sourceTree = SOURCE_ROOT; };
-		0261C17A7919F2AE5BFC8D0A /* Assembly-CSharp__52.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "Assembly-CSharp__52.cpp"; path = "Il2CppOutputProject/Source/il2cppOutput/Assembly-CSharp__52.cpp"; sourceTree = SOURCE_ROOT; };
 		0374DE58E2FECDF95FC29943 /* Unity.Burst.Unsafe.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Unity.Burst.Unsafe.cpp; path = Il2CppOutputProject/Source/il2cppOutput/Unity.Burst.Unsafe.cpp; sourceTree = SOURCE_ROOT; };
 		03A87A26A63177A70A5AC67E /* Assembly-CSharp__15.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "Assembly-CSharp__15.cpp"; path = "Il2CppOutputProject/Source/il2cppOutput/Assembly-CSharp__15.cpp"; sourceTree = SOURCE_ROOT; };
 		03F528621B447098000F4FB8 /* Il2CppOptions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Il2CppOptions.cpp; sourceTree = "<group>"; };
@@ -794,7 +793,6 @@
 				A34734E12320BFE93D77614B /* Assembly-CSharp__5.cpp */,
 				780EF42D0F810F6942D61886 /* Assembly-CSharp__50.cpp */,
 				6AF6E713D4C420DE4590CB06 /* Assembly-CSharp__51.cpp */,
-				0261C17A7919F2AE5BFC8D0A /* Assembly-CSharp__52.cpp */,
 				E0994B957EB074EB69BD9ABA /* Assembly-CSharp__6.cpp */,
 				504F10354AA6664ACC10AE55 /* Assembly-CSharp__7.cpp */,
 				0B698999CFCA23787EA976B2 /* Assembly-CSharp__8.cpp */,
@@ -1561,7 +1559,7 @@
 					"$(inherited)",
 					"$(OTHER_CFLAGS)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.NRO-SHENRON.DRAGON-BALL-SHENRON";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.LOCALNEW.NRO-LOCAL";
 				PRODUCT_NAME = "$(PRODUCT_NAME_APP)";
 				PROVISIONING_PROFILE = "$(PROVISIONING_PROFILE_APP)";
 				PROVISIONING_PROFILE_APP = "";
@@ -1600,7 +1598,7 @@
 					"$(inherited)",
 					"$(OTHER_CFLAGS)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.NRO-SHENRON.DRAGON-BALL-SHENRON";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.LOCALNEW.NRO-LOCAL";
 				PRODUCT_NAME = "$(PRODUCT_NAME_APP)";
 				PROVISIONING_PROFILE = "$(PROVISIONING_PROFILE_APP)";
 				PROVISIONING_PROFILE_APP = "";
@@ -1740,7 +1738,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				PRODUCT_NAME_APP = DRAGONBALLSHENRON;
+				PRODUCT_NAME_APP = NROVTC;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
 			};
@@ -1773,7 +1771,7 @@
 					"$(inherited)",
 					"$(OTHER_CFLAGS)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.NRO-SHENRON.DRAGON-BALL-SHENRON";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.LOCALNEW.NRO-LOCAL";
 				PRODUCT_NAME = "$(PRODUCT_NAME_APP)";
 				PROVISIONING_PROFILE = "$(PROVISIONING_PROFILE_APP)";
 				PROVISIONING_PROFILE_APP = "";
@@ -1863,7 +1861,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				PRODUCT_NAME_APP = DRAGONBALLSHENRON;
+				PRODUCT_NAME_APP = NROVTC;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
 			};
@@ -1895,7 +1893,7 @@
 					"$(inherited)",
 					"$(OTHER_CFLAGS)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.NRO-SHENRON.DRAGON-BALL-SHENRON";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.LOCALNEW.NRO-LOCAL";
 				PRODUCT_NAME = "$(PRODUCT_NAME_APP)";
 				PROVISIONING_PROFILE = "$(PROVISIONING_PROFILE_APP)";
 				PROVISIONING_PROFILE_APP = "";
@@ -2429,7 +2427,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_NAME_APP = DRAGONBALLSHENRON;
+				PRODUCT_NAME_APP = NROVTC;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
 			};
@@ -2468,7 +2466,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				PRODUCT_NAME_APP = DRAGONBALLSHENRON;
+				PRODUCT_NAME_APP = NROVTC;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
 			};

@@ -2881,6 +2881,7 @@ struct Mob_tCD9014C7513C94463ED7B3D43EC1299176D3BEA1_StaticFields
 struct ModFunc_tA6F0D7DB6A5926407FD10629866CDECEF483098C_StaticFields
 {
 	ModFunc_tA6F0D7DB6A5926407FD10629866CDECEF483098C* ___Instance;
+	String_t* ___homeUrl;
 	bool ___isInventory;
 	String_t* ___ipString;
 	bool ___isDebugEnable;
@@ -3043,7 +3044,6 @@ struct PickMob_t906E99E6CD80949417E73065E2BA82C461175979_StaticFields
 	Int16U5BU5D_t8175CE8DD9C9F9FB0CF4F58E45BC570575B43CFB* ___IdItemBlockBase;
 	bool ___tanSat;
 	bool ___tsPlayer;
-	bool ___tsBoss;
 	bool ___neSieuQuai;
 	bool ___vuotDiaHinh;
 	bool ___telePem;

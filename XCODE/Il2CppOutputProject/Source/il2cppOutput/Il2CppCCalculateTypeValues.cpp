@@ -14385,12 +14385,12 @@ struct U3CU3Ec__DisplayClass66_0_t892C285932134E13248FD210209881BF6B5831DB  : pu
 struct U3CU3Ec_t907D98881E1A286A3BB155EF393186589F3956A5  : public RuntimeObject
 {
 };
-struct U3CU3Ec__DisplayClass162_0_tA56071577DF2489D7B9D270477DB60F90E3DA499  : public RuntimeObject
+struct U3CU3Ec__DisplayClass161_0_t2D77175A4D2D0AA705AEFD8D1D6CF437C520DD93  : public RuntimeObject
 {
 	Item_tF110BDA0580EA73CD213DA7CDBEE080D44275EEA* ___itemBuy;
 	int32_t ___num;
 };
-struct U3CLoadFileU3Ed__198_t6733002E299E49AC37C24F2142457F24A040B212  : public RuntimeObject
+struct U3CLoadFileU3Ed__197_t373ABE60A707F095799191BB5AA1AE7DA939779E  : public RuntimeObject
 {
 	int32_t ___U3CU3E1__state;
 	RuntimeObject* ___U3CU3E2__current;
@@ -14400,12 +14400,12 @@ struct U3CLoadFileU3Ed__198_t6733002E299E49AC37C24F2142457F24A040B212  : public 
 struct U3CU3Ec_t4C4A333B7F930A92A51E24E34A58465E89FC4DE0  : public RuntimeObject
 {
 };
-struct U3CU3Ec__DisplayClass162_0_t36989B759B165200189281625D79273A627A4533  : public RuntimeObject
+struct U3CU3Ec__DisplayClass161_0_t003B293250BD38C6D253DE0D1DA250B70E86D549  : public RuntimeObject
 {
 	Item_tB20A4A826B70B9B7C3F27E69173019EDAD439310* ___itemBuy;
 	int32_t ___num;
 };
-struct U3CLoadFileU3Ed__198_t7D658F06BC2F3D3FA8B931B1808B340C5DF6226E  : public RuntimeObject
+struct U3CLoadFileU3Ed__197_t12773125AF9831E711FF6F478A2AE973D45F7DA1  : public RuntimeObject
 {
 	int32_t ___U3CU3E1__state;
 	RuntimeObject* ___U3CU3E2__current;
@@ -14415,12 +14415,12 @@ struct U3CLoadFileU3Ed__198_t7D658F06BC2F3D3FA8B931B1808B340C5DF6226E  : public 
 struct U3CU3Ec_t5DF0A12E7C076DB404DFE4B631825E1DE0BD9A84  : public RuntimeObject
 {
 };
-struct U3CU3Ec__DisplayClass162_0_tD8839CDB88AEAF0EA5D21E908D66C2AF0AC32F58  : public RuntimeObject
+struct U3CU3Ec__DisplayClass161_0_tD7EB1A2F9C48BA9F96B770F64775B6ACE36A150E  : public RuntimeObject
 {
 	Item_t7807341575507F8546B0319B7B4CF8D874FF2F36* ___itemBuy;
 	int32_t ___num;
 };
-struct U3CLoadFileU3Ed__198_t5D91F5A1414493DDEFE96409F684791F2741392B  : public RuntimeObject
+struct U3CLoadFileU3Ed__197_t963780A536950FC0567C73E2F5D9A2FBC2DAD1E3  : public RuntimeObject
 {
 	int32_t ___U3CU3E1__state;
 	RuntimeObject* ___U3CU3E2__current;
@@ -17505,11 +17505,15 @@ struct CreateCharScr_t177244D2440657AA12151611C1E3A176ED0CC928  : public mScreen
 	Int32U5BU5D_t19C97395396A72ECAF310612F0760F165060314C* ___bgID;
 	int32_t ___yBegin;
 	int32_t ___curIndex;
-	int32_t ___cx;
-	int32_t ___cy;
-	int32_t ___dy;
+	int32_t ___xr;
 	int32_t ___cp1;
 	int32_t ___cf;
+	int16_t ___previewSkillId;
+	int32_t ___previewSkillDelay;
+	Point_t5B793577E6FECD73F942C2FC652CB2BD55A222AF* ___previewSkillTarget;
+	int16_t ___previewSkillRange;
+	int32_t ___heartbeatTick;
+	int32_t ___zoomout;
 };
 struct CreateCharScr_t0337B1C3BA43B64D4FD788B8FAE2FBFBF7365235  : public mScreen_tF09D53508EB516F4ACA68A90046A69EEA058C080
 {
@@ -17519,11 +17523,15 @@ struct CreateCharScr_t0337B1C3BA43B64D4FD788B8FAE2FBFBF7365235  : public mScreen
 	Int32U5BU5D_t19C97395396A72ECAF310612F0760F165060314C* ___bgID;
 	int32_t ___yBegin;
 	int32_t ___curIndex;
-	int32_t ___cx;
-	int32_t ___cy;
-	int32_t ___dy;
+	int32_t ___xr;
 	int32_t ___cp1;
 	int32_t ___cf;
+	int16_t ___previewSkillId;
+	int32_t ___previewSkillDelay;
+	Point_tD884E30AE6453304A67664AE41998B3C9B4BF16E* ___previewSkillTarget;
+	int16_t ___previewSkillRange;
+	int32_t ___heartbeatTick;
+	int32_t ___zoomout;
 };
 struct CreateCharScr_tCED4859D55B6E741E80943629915A8EF19615805  : public mScreen_t9B7935224BB6EB747737D7AAA54C6716F709D2D0
 {
@@ -17533,11 +17541,15 @@ struct CreateCharScr_tCED4859D55B6E741E80943629915A8EF19615805  : public mScreen
 	Int32U5BU5D_t19C97395396A72ECAF310612F0760F165060314C* ___bgID;
 	int32_t ___yBegin;
 	int32_t ___curIndex;
-	int32_t ___cx;
-	int32_t ___cy;
-	int32_t ___dy;
+	int32_t ___xr;
 	int32_t ___cp1;
 	int32_t ___cf;
+	int16_t ___previewSkillId;
+	int32_t ___previewSkillDelay;
+	Point_tE902A20B7E2F92130EC442E0AF798FB9FA441900* ___previewSkillTarget;
+	int16_t ___previewSkillRange;
+	int32_t ___heartbeatTick;
+	int32_t ___zoomout;
 };
 struct CreatePropertyAttribute_tE99286E9956A00FC302542DA09D73B4C52B6E19A  : public Attribute_tFDA8EFEFB0711976D22474794576DAF28F7440AA
 {
@@ -55637,7 +55649,6 @@ struct GameConfig_tD0048BC6F9961272F354783D9C0F361D6BA6B1B9_StaticFields
 	bool ___isInventory;
 	bool ___isShowDungluong;
 	String_t* ___VERSION2;
-	Int32U5BU5D_t19C97395396A72ECAF310612F0760F165060314C* ___porataIds;
 	bool _____loadedFromBundle;
 };
 struct GameMidlet_tBCA1311E2140C85E2B84A0B5C8019E5A3617CBD9_StaticFields
@@ -56434,6 +56445,7 @@ struct MobCapcha_t7D19132B7CAF7F2BE0630245F2EFE5616E595998_StaticFields
 struct ModFunc_tF32BF759318959F988FBE29C7627BCBFCACA2117_StaticFields
 {
 	ModFunc_tF32BF759318959F988FBE29C7627BCBFCACA2117* ___Instance;
+	String_t* ___homeUrl;
 	bool ___isInventory;
 	String_t* ___ipString;
 	bool ___isDebugEnable;
@@ -56515,6 +56527,7 @@ struct ModFunc_tF32BF759318959F988FBE29C7627BCBFCACA2117_StaticFields
 struct ModFunc_t9F5F3739CB4487FC0CA3CD4293760B7C63FAF097_StaticFields
 {
 	ModFunc_t9F5F3739CB4487FC0CA3CD4293760B7C63FAF097* ___Instance;
+	String_t* ___homeUrl;
 	bool ___isInventory;
 	String_t* ___ipString;
 	bool ___isDebugEnable;
@@ -56596,6 +56609,7 @@ struct ModFunc_t9F5F3739CB4487FC0CA3CD4293760B7C63FAF097_StaticFields
 struct ModFunc_tA6F0D7DB6A5926407FD10629866CDECEF483098C_StaticFields
 {
 	ModFunc_tA6F0D7DB6A5926407FD10629866CDECEF483098C* ___Instance;
+	String_t* ___homeUrl;
 	bool ___isInventory;
 	String_t* ___ipString;
 	bool ___isDebugEnable;
@@ -57221,7 +57235,6 @@ struct PickMob_t72DD46AAC4361DB984072DBEC8785861856F3217_StaticFields
 	Int16U5BU5D_t8175CE8DD9C9F9FB0CF4F58E45BC570575B43CFB* ___IdItemBlockBase;
 	bool ___tanSat;
 	bool ___tsPlayer;
-	bool ___tsBoss;
 	bool ___neSieuQuai;
 	bool ___vuotDiaHinh;
 	bool ___telePem;
@@ -57251,7 +57264,6 @@ struct PickMob_t3C819B6694E8A0030C084DD5C555AC7AB7096EC2_StaticFields
 	Int16U5BU5D_t8175CE8DD9C9F9FB0CF4F58E45BC570575B43CFB* ___IdItemBlockBase;
 	bool ___tanSat;
 	bool ___tsPlayer;
-	bool ___tsBoss;
 	bool ___neSieuQuai;
 	bool ___vuotDiaHinh;
 	bool ___telePem;
@@ -57281,7 +57293,6 @@ struct PickMob_t906E99E6CD80949417E73065E2BA82C461175979_StaticFields
 	Int16U5BU5D_t8175CE8DD9C9F9FB0CF4F58E45BC570575B43CFB* ___IdItemBlockBase;
 	bool ___tanSat;
 	bool ___tsPlayer;
-	bool ___tsBoss;
 	bool ___neSieuQuai;
 	bool ___vuotDiaHinh;
 	bool ___telePem;
@@ -61136,17 +61147,17 @@ struct U3CU3Ec_tB68D78EDA2436237A516D6FBA5198A68382BA381_StaticFields
 struct U3CU3Ec_t907D98881E1A286A3BB155EF393186589F3956A5_StaticFields
 {
 	U3CU3Ec_t907D98881E1A286A3BB155EF393186589F3956A5* ___U3CU3E9;
-	Func_2_tBB0D7C02FB04CB15F2B32B7ED20E9B69E87AF505* ___U3CU3E9__143_0;
+	Func_2_tBB0D7C02FB04CB15F2B32B7ED20E9B69E87AF505* ___U3CU3E9__142_0;
 };
 struct U3CU3Ec_t4C4A333B7F930A92A51E24E34A58465E89FC4DE0_StaticFields
 {
 	U3CU3Ec_t4C4A333B7F930A92A51E24E34A58465E89FC4DE0* ___U3CU3E9;
-	Func_2_tBB0D7C02FB04CB15F2B32B7ED20E9B69E87AF505* ___U3CU3E9__143_0;
+	Func_2_tBB0D7C02FB04CB15F2B32B7ED20E9B69E87AF505* ___U3CU3E9__142_0;
 };
 struct U3CU3Ec_t5DF0A12E7C076DB404DFE4B631825E1DE0BD9A84_StaticFields
 {
 	U3CU3Ec_t5DF0A12E7C076DB404DFE4B631825E1DE0BD9A84* ___U3CU3E9;
-	Func_2_tBB0D7C02FB04CB15F2B32B7ED20E9B69E87AF505* ___U3CU3E9__143_0;
+	Func_2_tBB0D7C02FB04CB15F2B32B7ED20E9B69E87AF505* ___U3CU3E9__142_0;
 };
 struct U3CU3Ec_t8F658FC97886173144AB5B56F05CD72CD759F62F_StaticFields
 {
@@ -61978,9 +61989,28 @@ struct CreateCharScr_t177244D2440657AA12151611C1E3A176ED0CC928_StaticFields
 	int32_t ___indexGender;
 	int32_t ___indexHair;
 	int32_t ___selected;
+	int32_t ___fkinh;
 	Int32U5BU5DU5BU5D_t179D865D5B30EFCBC50F82C9774329C15943466E* ___hairID;
 	Int32U5BU5D_t19C97395396A72ECAF310612F0760F165060314C* ___defaultLeg;
 	Int32U5BU5D_t19C97395396A72ECAF310612F0760F165060314C* ___defaultBody;
+	int32_t ___cx;
+	int32_t ___cy;
+	int32_t ___dy;
+	Char_tAC9535BFDBF32A091EE4D890C6596393BF6411AA* ___previewChar;
+	ImageeU5BU5D_t3ADCC5F8AFD58A16EB32F47218AE47632AE4BA15* ___bgnewplayer;
+	ImageeU5BU5D_t3ADCC5F8AFD58A16EB32F47218AE47632AE4BA15* ___kinhdosm0;
+	ImageeU5BU5D_t3ADCC5F8AFD58A16EB32F47218AE47632AE4BA15* ___kinhdosm1;
+	ImageeU5BU5D_t3ADCC5F8AFD58A16EB32F47218AE47632AE4BA15* ___kinhdosm2;
+	ImageeU5BU5D_t3ADCC5F8AFD58A16EB32F47218AE47632AE4BA15* ___bttGender;
+	ImageeU5BU5D_t3ADCC5F8AFD58A16EB32F47218AE47632AE4BA15* ___bttFGender;
+	ImageeU5BU5D_t3ADCC5F8AFD58A16EB32F47218AE47632AE4BA15* ___angten;
+	ImageeU5BU5D_t3ADCC5F8AFD58A16EB32F47218AE47632AE4BA15* ___candauvan;
+	ImageeU5BU5D_t3ADCC5F8AFD58A16EB32F47218AE47632AE4BA15* ___beplua;
+	Imagee_tA45DF11A4E886AE64325FC33BFD617DAADC0851F* ___switch_l;
+	Imagee_tA45DF11A4E886AE64325FC33BFD617DAADC0851F* ___switch_r;
+	Imagee_tA45DF11A4E886AE64325FC33BFD617DAADC0851F* ___switchf_l;
+	Imagee_tA45DF11A4E886AE64325FC33BFD617DAADC0851F* ___switchf_r;
+	Imagee_tA45DF11A4E886AE64325FC33BFD617DAADC0851F* ___cloudbg;
 };
 struct CreateCharScr_t0337B1C3BA43B64D4FD788B8FAE2FBFBF7365235_StaticFields
 {
@@ -61990,9 +62020,28 @@ struct CreateCharScr_t0337B1C3BA43B64D4FD788B8FAE2FBFBF7365235_StaticFields
 	int32_t ___indexGender;
 	int32_t ___indexHair;
 	int32_t ___selected;
+	int32_t ___fkinh;
 	Int32U5BU5DU5BU5D_t179D865D5B30EFCBC50F82C9774329C15943466E* ___hairID;
 	Int32U5BU5D_t19C97395396A72ECAF310612F0760F165060314C* ___defaultLeg;
 	Int32U5BU5D_t19C97395396A72ECAF310612F0760F165060314C* ___defaultBody;
+	int32_t ___cx;
+	int32_t ___cy;
+	int32_t ___dy;
+	Char_t9F76E484ED25A313693CF660E49987CA230B0EC6* ___previewChar;
+	ImageeU5BU5D_t140775748793219DAD33BE318B7F7A0AF725636C* ___bgnewplayer;
+	ImageeU5BU5D_t140775748793219DAD33BE318B7F7A0AF725636C* ___kinhdosm0;
+	ImageeU5BU5D_t140775748793219DAD33BE318B7F7A0AF725636C* ___kinhdosm1;
+	ImageeU5BU5D_t140775748793219DAD33BE318B7F7A0AF725636C* ___kinhdosm2;
+	ImageeU5BU5D_t140775748793219DAD33BE318B7F7A0AF725636C* ___bttGender;
+	ImageeU5BU5D_t140775748793219DAD33BE318B7F7A0AF725636C* ___bttFGender;
+	ImageeU5BU5D_t140775748793219DAD33BE318B7F7A0AF725636C* ___angten;
+	ImageeU5BU5D_t140775748793219DAD33BE318B7F7A0AF725636C* ___candauvan;
+	ImageeU5BU5D_t140775748793219DAD33BE318B7F7A0AF725636C* ___beplua;
+	Imagee_tAB924FCAFED60F5C73886072EBC74923F65969F2* ___switch_l;
+	Imagee_tAB924FCAFED60F5C73886072EBC74923F65969F2* ___switch_r;
+	Imagee_tAB924FCAFED60F5C73886072EBC74923F65969F2* ___switchf_l;
+	Imagee_tAB924FCAFED60F5C73886072EBC74923F65969F2* ___switchf_r;
+	Imagee_tAB924FCAFED60F5C73886072EBC74923F65969F2* ___cloudbg;
 };
 struct CreateCharScr_tCED4859D55B6E741E80943629915A8EF19615805_StaticFields
 {
@@ -62002,9 +62051,28 @@ struct CreateCharScr_tCED4859D55B6E741E80943629915A8EF19615805_StaticFields
 	int32_t ___indexGender;
 	int32_t ___indexHair;
 	int32_t ___selected;
+	int32_t ___fkinh;
 	Int32U5BU5DU5BU5D_t179D865D5B30EFCBC50F82C9774329C15943466E* ___hairID;
 	Int32U5BU5D_t19C97395396A72ECAF310612F0760F165060314C* ___defaultLeg;
 	Int32U5BU5D_t19C97395396A72ECAF310612F0760F165060314C* ___defaultBody;
+	int32_t ___cx;
+	int32_t ___cy;
+	int32_t ___dy;
+	Char_tEF02D1F86AD92A794E1615A2AAF94B8B70609009* ___previewChar;
+	ImageeU5BU5D_t68FB7C298F51564C116614EB4FDF694748107F53* ___bgnewplayer;
+	ImageeU5BU5D_t68FB7C298F51564C116614EB4FDF694748107F53* ___kinhdosm0;
+	ImageeU5BU5D_t68FB7C298F51564C116614EB4FDF694748107F53* ___kinhdosm1;
+	ImageeU5BU5D_t68FB7C298F51564C116614EB4FDF694748107F53* ___kinhdosm2;
+	ImageeU5BU5D_t68FB7C298F51564C116614EB4FDF694748107F53* ___bttGender;
+	ImageeU5BU5D_t68FB7C298F51564C116614EB4FDF694748107F53* ___bttFGender;
+	ImageeU5BU5D_t68FB7C298F51564C116614EB4FDF694748107F53* ___angten;
+	ImageeU5BU5D_t68FB7C298F51564C116614EB4FDF694748107F53* ___candauvan;
+	ImageeU5BU5D_t68FB7C298F51564C116614EB4FDF694748107F53* ___beplua;
+	Imagee_tA6DE6080F50192AB70D5290A245C385DBC5694B0* ___switch_l;
+	Imagee_tA6DE6080F50192AB70D5290A245C385DBC5694B0* ___switch_r;
+	Imagee_tA6DE6080F50192AB70D5290A245C385DBC5694B0* ___switchf_l;
+	Imagee_tA6DE6080F50192AB70D5290A245C385DBC5694B0* ___switchf_r;
+	Imagee_tA6DE6080F50192AB70D5290A245C385DBC5694B0* ___cloudbg;
 };
 struct CreationContext_t9C57B5BE551CCE200C0A2C72711BFF9DA298C257_StaticFields
 {
@@ -66117,9 +66185,9 @@ const Il2CppTypeDefinitionSizes g_typeDefinitionSize160 = { sizeof(RemoteAddress
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize161;
 const Il2CppTypeDefinitionSizes g_typeDefinitionSize161 = { sizeof(U3CU3Ec_t5DF0A12E7C076DB404DFE4B631825E1DE0BD9A84), -1, sizeof(U3CU3Ec_t5DF0A12E7C076DB404DFE4B631825E1DE0BD9A84_StaticFields), 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize162;
-const Il2CppTypeDefinitionSizes g_typeDefinitionSize162 = { sizeof(U3CU3Ec__DisplayClass162_0_tD8839CDB88AEAF0EA5D21E908D66C2AF0AC32F58), -1, 0, 0 };
+const Il2CppTypeDefinitionSizes g_typeDefinitionSize162 = { sizeof(U3CU3Ec__DisplayClass161_0_tD7EB1A2F9C48BA9F96B770F64775B6ACE36A150E), -1, 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize163;
-const Il2CppTypeDefinitionSizes g_typeDefinitionSize163 = { sizeof(U3CLoadFileU3Ed__198_t5D91F5A1414493DDEFE96409F684791F2741392B), -1, 0, 0 };
+const Il2CppTypeDefinitionSizes g_typeDefinitionSize163 = { sizeof(U3CLoadFileU3Ed__197_t963780A536950FC0567C73E2F5D9A2FBC2DAD1E3), -1, 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize164;
 const Il2CppTypeDefinitionSizes g_typeDefinitionSize164 = { sizeof(ModFunc_tA6F0D7DB6A5926407FD10629866CDECEF483098C), -1, sizeof(ModFunc_tA6F0D7DB6A5926407FD10629866CDECEF483098C_StaticFields), 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize165;
@@ -66625,9 +66693,9 @@ const Il2CppTypeDefinitionSizes g_typeDefinitionSize414 = { sizeof(RemoteAddress
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize415;
 const Il2CppTypeDefinitionSizes g_typeDefinitionSize415 = { sizeof(U3CU3Ec_t4C4A333B7F930A92A51E24E34A58465E89FC4DE0), -1, sizeof(U3CU3Ec_t4C4A333B7F930A92A51E24E34A58465E89FC4DE0_StaticFields), 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize416;
-const Il2CppTypeDefinitionSizes g_typeDefinitionSize416 = { sizeof(U3CU3Ec__DisplayClass162_0_t36989B759B165200189281625D79273A627A4533), -1, 0, 0 };
+const Il2CppTypeDefinitionSizes g_typeDefinitionSize416 = { sizeof(U3CU3Ec__DisplayClass161_0_t003B293250BD38C6D253DE0D1DA250B70E86D549), -1, 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize417;
-const Il2CppTypeDefinitionSizes g_typeDefinitionSize417 = { sizeof(U3CLoadFileU3Ed__198_t7D658F06BC2F3D3FA8B931B1808B340C5DF6226E), -1, 0, 0 };
+const Il2CppTypeDefinitionSizes g_typeDefinitionSize417 = { sizeof(U3CLoadFileU3Ed__197_t12773125AF9831E711FF6F478A2AE973D45F7DA1), -1, 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize418;
 const Il2CppTypeDefinitionSizes g_typeDefinitionSize418 = { sizeof(ModFunc_t9F5F3739CB4487FC0CA3CD4293760B7C63FAF097), -1, sizeof(ModFunc_t9F5F3739CB4487FC0CA3CD4293760B7C63FAF097_StaticFields), 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize419;
@@ -67129,9 +67197,9 @@ const Il2CppTypeDefinitionSizes g_typeDefinitionSize666 = { sizeof(RemoteAddress
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize667;
 const Il2CppTypeDefinitionSizes g_typeDefinitionSize667 = { sizeof(U3CU3Ec_t907D98881E1A286A3BB155EF393186589F3956A5), -1, sizeof(U3CU3Ec_t907D98881E1A286A3BB155EF393186589F3956A5_StaticFields), 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize668;
-const Il2CppTypeDefinitionSizes g_typeDefinitionSize668 = { sizeof(U3CU3Ec__DisplayClass162_0_tA56071577DF2489D7B9D270477DB60F90E3DA499), -1, 0, 0 };
+const Il2CppTypeDefinitionSizes g_typeDefinitionSize668 = { sizeof(U3CU3Ec__DisplayClass161_0_t2D77175A4D2D0AA705AEFD8D1D6CF437C520DD93), -1, 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize669;
-const Il2CppTypeDefinitionSizes g_typeDefinitionSize669 = { sizeof(U3CLoadFileU3Ed__198_t6733002E299E49AC37C24F2142457F24A040B212), -1, 0, 0 };
+const Il2CppTypeDefinitionSizes g_typeDefinitionSize669 = { sizeof(U3CLoadFileU3Ed__197_t373ABE60A707F095799191BB5AA1AE7DA939779E), -1, 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize670;
 const Il2CppTypeDefinitionSizes g_typeDefinitionSize670 = { sizeof(ModFunc_tF32BF759318959F988FBE29C7627BCBFCACA2117), -1, sizeof(ModFunc_tF32BF759318959F988FBE29C7627BCBFCACA2117_StaticFields), 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize671;
